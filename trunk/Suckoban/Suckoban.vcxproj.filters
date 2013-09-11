@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Gine">
+      <UniqueIdentifier>{079605bb-9343-4db6-be10-5532b48bc1b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="FX">
+      <UniqueIdentifier>{e5e0b82f-bde7-46c9-861d-bfb01fe1b2e0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="code\gine\Animation.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Camera.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\d3dApp.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\d3dUtil.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\d3dx11effect.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Effects.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Font.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\FontSheet.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\FontText.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\GameTimer.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\GeometryGenerator.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Gine.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\GineUtils.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Info.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Input.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\LightHelper.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Material.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\MathHelper.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Mesh.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Model.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\RenderStates.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\resource.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Sprite.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\SpriteBatch.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Text.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Texture.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Tween.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Vertex.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\xnacollision.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Gameplay.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="code\State.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Level.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="code\LevelStart.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Moveable.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="code\LevelPause.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="code\main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Animation.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Camera.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\d3dApp.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\d3dUtil.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Effects.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Font.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\FontSheet.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\FontText.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\GameTimer.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\GeometryGenerator.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Gine.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\GineUtils.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Info.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Input.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\LightHelper.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Material.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\MathHelper.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Mesh.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Model.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\RenderStates.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Sprite.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\SpriteBatch.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Text.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Texture.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Tween.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Vertex.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\xnacollision.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\State.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\fx\Basic.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="data\fx\LightHelper.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="data\fx\Ssao.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="data\fx\SsaoBlur.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="data\fx\SsaoNormalDepth.fx">
+      <Filter>FX</Filter>
+    </None>
+  </ItemGroup>
+</Project>
