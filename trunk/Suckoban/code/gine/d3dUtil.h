@@ -22,63 +22,6 @@
 #include "LightHelper.h"
 #include "d3dx11Effect.h"
 
-namespace Gine
-{
-  namespace Dir 
-  { 
-    enum Enum
-    {
-      UP = 0,
-      RIGHT,
-      DOWN,
-      LEFT,
-      NONE_DIR
-    };
-
-    Enum OppositeDir(Enum dir);   
-  }
-
-	struct Node
-	{
-    Node() : x(0), y(0) {};
-    Node(int aX, int aY) : x(aX), y(aY) {};
-	  int x;
-	  int y;
-    
-    Node GetAt(Dir::Enum aDir)
-    {
-      using namespace Dir;
-      switch(aDir)
-      {
-      case UP    : return Node(x, y + 1);
-      case RIGHT : return Node(x + 1, y);
-      case DOWN  : return Node(x, y - 1);
-      case LEFT  : return Node(x - 1, y);
-      default    : return Node(x, y);
-      }
-    }
-    
-    bool operator== (const Node& node) const { return x==node.x && y==node.y; };
-	};
-}
-
-namespace Utils 
-{
-  // Code utils
-  float RandFrom(float a, float b);
-  float Length(XMFLOAT3 a);
-  float Distance(XMFLOAT3 a, XMFLOAT3 b);
-  XMFLOAT3 RotateToVector(const XMFLOAT3& v);
-  XMFLOAT3 VectorToRotate(const XMFLOAT3& r);
-  XMFLOAT3 RotatePoint(XMFLOAT3 aPoint, XMFLOAT3 aRotation);
-
-  // Modulo down the angles
-  void OptimizeRotation(float aRot, float& aRotTarget);
-
-  // Simple 1/2 tween
-  void Tween(float& aX, float aTarget, float aSpeed, float aDt);
-}
-
 XMFLOAT3 operator* (XMFLOAT3 a, float l);
 XMFLOAT3 operator* (float l, XMFLOAT3 a);
 XMFLOAT3 operator+ (XMFLOAT3 a, XMFLOAT3 b);

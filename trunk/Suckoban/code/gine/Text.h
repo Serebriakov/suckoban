@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "SpriteBatch.h"
 #include "Font.h"
 #include "Tween.h"
 using namespace std;

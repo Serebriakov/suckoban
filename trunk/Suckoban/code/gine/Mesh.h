@@ -8,6 +8,7 @@
 #include "Animation.h"
 using namespace std;
 using namespace XNA;
+using namespace Gine;
 
 class Mesh
 {

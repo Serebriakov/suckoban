@@ -1,27 +1,26 @@
 #include "Font.h"
-#include "Gine.h"
 #include "GineUtils.h"
 using namespace Gine;
 
-int Font::CalculateTextWidth(const wstring* aText)
+int Font::CalculateTextWidth(const wstring* text)
 {
   if(!mIsFontSheetInitialized) 
   {
-    Info::Fatal("Trying to calculate width of an undefined text");
+    Info::Fatal("FontSheet not initialized");
     return 0;
   }
 
   int textWidth = 0;
-	for(UINT i = 0; i < aText->size(); ++i)
+	for(UINT i = 0; i < text->size(); ++i)
 	{
-		WCHAR character = aText->at(i);
+		WCHAR character = text->at(i);
 		if(character == ' ') 
 		{
 			textWidth += mFontSheet.GetSpaceWidth();
 		}
 		else
 		{
-			const CD3D11_RECT& r = mFontSheet.GetCharRect(aText->at(i));
+			const CD3D11_RECT& r = mFontSheet.GetCharRect(text->at(i));
 			textWidth += (r.right - r.left + 1);
 		}
 	}
@@ -35,17 +34,17 @@ Font::Font()
   Color = XMCOLOR(1.0f, 1.0f, 1.0f, 0.8f);
 }
 
-Font::Font(string aName, float aSize, XMCOLOR aColor, eFontStyle aStyle)
+Font::Font(string name, float size, XMCOLOR color, FontStyle style)
 {
   mIsFontSheetInitialized = false;
-  Load(aName, aSize, aColor, aStyle);
+  Load(name, size, color, style);
 }
 
 Font::~Font()
 {
 }
 
-bool Font::Load(string aName, float aSize, XMCOLOR aColor, eFontStyle aStyle)
+bool Font::Load(string name, float size, XMCOLOR color, FontStyle style)
 {  
   if(mIsFontSheetInitialized)
   {
@@ -53,14 +52,14 @@ bool Font::Load(string aName, float aSize, XMCOLOR aColor, eFontStyle aStyle)
     return false;
   }
 
-  HRESULT result = mFontSheet.Initialize(gDevice, Utils::ToWString(&aName), aSize, (FontSheet::FontStyle) aStyle, true);
+  HRESULT result = mFontSheet.Initialize(gDevice, Utils::ToWString(&name), size, (FontSheet::FontStyle) style, true);
   if(FAILED(result))
   {
     Info::Fatal("FontSheet initialization failed with error code 0x%08lx", result);
     return false;
   }
 
-  Color = aColor;
+  Color = color;
   mIsFontSheetInitialized = true;
 
   return true;

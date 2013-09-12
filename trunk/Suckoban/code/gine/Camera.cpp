@@ -1,18 +1,20 @@
-//***************************************************************************************
-// Camera.h by Frank Luna (C) 2011 All Rights Reserved.
-//***************************************************************************************
-
 #include "Camera.h"
-using Gine::Camera;
-using Gine::Model;
+#include "GineUtils.h"
+using namespace Gine;
 
-Camera::Camera()
-	: mPosition(0.0f, 0.0f, 0.0f), 
-	  mRight(1.0f, 0.0f, 0.0f),
-	  mUp(0.0f, 1.0f, 0.0f),
-	  mLook(0.0f, 0.0f, 1.0f)
+// Camera in CS center
+// ROLL  : RotZ
+// PITCH : RotX
+// YAW   : RotY
+
+const float ROTATE_SPEED = 0.075f;
+
+Camera::Camera() :
+  mPosition(0.0f, 0.0f, 0.0f),
+  mRight(1.0f, 0.0f, 0.0f),
+  mUp(0.0f, 1.0f, 0.0f),
+  mLook(0.0f, 0.0f, 1.0f)
 {
-	SetLens(0.25f*MathHelper::Pi, 1.0f, 1.0f, 1000.0f);
 }
 
 Camera::~Camera()
@@ -215,13 +217,11 @@ void Camera::RotateY(float angle)
 
 void Camera::Rotate(int aDx, int aDy)
 {
-  const float speed = 0.075f;
-
   static bool falseWMMOUSE = false;
   if(!falseWMMOUSE)
   {
-    float dx = XMConvertToRadians(speed * float(aDx));
-    float dy = XMConvertToRadians(speed * float(aDy));
+    float dx = XMConvertToRadians(ROTATE_SPEED * float(aDx));
+    float dy = XMConvertToRadians(ROTATE_SPEED * float(aDy));
 
     Pitch(dy);
 		RotateY(dx);
@@ -314,11 +314,9 @@ void Camera::Cull(vector<Model*>* aModels)
     XMMatrixDecompose(&scale, &rotQuat, &translation, toLocal);
 
     Frustum localSpaceFrustum;
-    TransformFrustum(&localSpaceFrustum, &mFrustum, XMVectorGetX(scale),
-                     rotQuat, translation);
+    TransformFrustum(&localSpaceFrustum, &mFrustum, XMVectorGetX(scale), rotQuat, translation);
 
-    if(!IntersectAxisAlignedBoxFrustum(
-         rl[i]->GetAxisAlignedBoundingBox(), &localSpaceFrustum))
+    if(!IntersectAxisAlignedBoxFrustum(rl[i]->GetAxisAlignedBoundingBox(), &localSpaceFrustum))
     {
       rl[i]->isInFrustum = false;
       rl.erase(rl.begin() + i);
