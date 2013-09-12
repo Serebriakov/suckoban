@@ -1,5 +1,5 @@
 #pragma once
-#include "Gine.h"
+#include "GineUtils.h"
 
 const int N_VIRTUAL_KEYS = 0xFE;
 

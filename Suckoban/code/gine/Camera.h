@@ -1,17 +1,5 @@
-//***************************************************************************************
-// Camera.h by Frank Luna (C) 2011 All Rights Reserved.
-//   
-// Simple first person style camera class that lets the viewer explore the 3D scene.
-//   -It keeps track of the camera coordinate system relative to the world space
-//    so that the view matrix can be constructed.  
-//   -It keeps track of the viewing frustum of the camera so that the projection
-//    matrix can be obtained.
-//***************************************************************************************
+#pragma once
 
-#ifndef CAMERA_H
-#define CAMERA_H
-
-#include <vector>
 #include "d3dUtil.h"
 #include "xnacollision.h"
 #include "Model.h"
@@ -20,7 +8,12 @@ using namespace XNA;
 
 namespace Gine
 {
+  // Needed for frustum culling
   class Model;
+
+  /// <summary> 
+  /// Camera class for storing camera position, frustum and lens properties
+  /// </summary>
 
   class Camera
   {
@@ -104,9 +97,8 @@ namespace Gine
 	  XMFLOAT4X4 mView;
 	  XMFLOAT4X4 mProj;
 
-    // Frustrum
+    // Frustum
     Frustum mFrustum;
   };
-}
 
-#endif // CAMERA_H
+}

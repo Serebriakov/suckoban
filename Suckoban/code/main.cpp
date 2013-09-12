@@ -90,46 +90,7 @@ void Game::UpdateScene(float dt)
 }
 
 void Game::DrawScene()
-{
-  // Update per frame variables
-	//XMMATRIX view     = gCamera->View();
-	//XMMATRIX proj     = gCamera->Proj();
-	//XMMATRIX viewProj = gCamera->ViewProj();
- // Effects::BasicFX->SetEyePosW(gCamera->GetPosition());
- // XMFLOAT2 windowSize = XMFLOAT2(mClientWidth, mClientHeight);
- // Effects::BasicFX->SetWindowsSize(windowSize);
- // Effects::BasicFX->SetViewProj(viewProj);
-
-  //// Lights
-  //if(torches.size() > 0)
-  //{
-  //  PointLight* lights = new PointLight[50];
-
-  //  int nVisibleLights = 0;
-  //  for(UINT i=0; i<torches.size(); i++) 
-  //  {
-  //    if(Utils::Distance(torches[i].light.Position, 
-  //                       mCamera.GetPosition()) < mCamera.GetFarZ())
-  //      lights[nVisibleLights++] = torches[i].light;
-  //  }
-  //  
-  //  Effects::BasicFX->SetRenderedPointLights(nVisibleLights);
-  //  Effects::BasicFX->SetPointLights(lights);
-
-  //  delete[] lights;
-
-  //  //mFontSmall.Print(30, 200, TEXTALIGN_LEFT, "Lights: %d\n", nVisibleLights);
-  //}
-
-  // Geometry
-  //float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-  //md3dImmediateContext->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
-  //GameTimer::SetDebugStart();
-  //Model::Draw(&mRenderList, Effects::BasicFX->BasicTech,
-  //            Effects::BasicFX->InstancedTech, &mCamera);
-  
+{  
   state->Draw();
-	//ID3D11ShaderResourceView* nullSRV[16] = { 0 };
-	//md3dImmediateContext->PSSetShaderResources(0, 16, nullSRV);
   HR(mSwapChain->Present(0, 0));
 }

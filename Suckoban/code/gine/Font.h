@@ -1,12 +1,11 @@
 #pragma once
 #include <string>
 #include "FontSheet.h"
-#include "SpriteBatch.h"
 using namespace std;
 
 namespace Gine 
 {
-  enum eFontStyle 
+  enum FontStyle 
   {
 	  FONTSTYLE_REGUAR       = 0,
 	  FONTSTYLE_BOLD         = 1,
@@ -16,18 +15,23 @@ namespace Gine
 	  FONTSTYLE_STRIKEOUT    = 8 
   };
 
+  /// <summary>
+  /// Font with specified size, color and style
+  /// </summary>
+
   class Font
   {
   public:
     Font();
-    Font(string aName, float aSize, XMCOLOR aColor, eFontStyle aStyle);
+    Font(string name, float size, XMCOLOR color, FontStyle style);
     ~Font();
 
     XMCOLOR Color;
-    
-    int CalculateTextWidth(const wstring* aText);
+
     FontSheet& GetFontSheet() { return mFontSheet; };
-    bool Load(string aName, float aSize, XMCOLOR aColor, eFontStyle aStyle);
+    
+    bool Load(string name, float size, XMCOLOR color, FontStyle style);
+    int CalculateTextWidth(const wstring* text);
 
   private:
     FontSheet mFontSheet;

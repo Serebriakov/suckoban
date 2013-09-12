@@ -1,119 +1,98 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include <map>
 #include "d3dUtil.h"
 #include "Info.h"
 using namespace std;
 using Gine::Info;
 
-struct Bone
-{
-  string name;
-  XMFLOAT4X4 offset;
-  XMFLOAT4X4 toParent;
+namespace Gine {
 
-  Bone* parent;
-  vector<Bone*> childs;
+  /// <summary>
+  /// Simple tree of the bones. 
+  /// A bone with null as a parent is a root of the skeleton. 
+  /// </summary>
 
-  XMFLOAT4X4 toRoot;
-
-  void Print()
+  struct Bone
   {
-    Info::Log("Bone:\t%s", name.c_str());
+    string name;
 
-    if(parent)
-      Info::Log("Parent:\t%s", parent->name.c_str());
-    else
-      Info::Log("Parent:\tNULL");
+    // Root -> Position
+    XMFLOAT4X4 offset;
 
-    if(childs.size() > 0)
-    {
-      Info::Log("Childs:\t%d", childs.size());
-      for(UINT i=0; i<childs.size(); i++)
-        Info::Log("%d:\t%s", i, childs[i]->name.c_str());
-    }
-    else
-      Info::Log("Childs:\t0", name.c_str());
+    // Position -> Parent bone
+    XMFLOAT4X4 toParent;
+    Bone* parent;
 
-    
-    Info::Log("Offset:");
-    Info::Print(offset);
-    
-    Info::Log("To parent:");
-    Info::Print(toParent);
+    // Position -> Root
+    XMFLOAT4X4 toRoot;
 
-    Info::Log("To root:");
-    Info::Print(toRoot);
+    vector<Bone*> childs;
 
-    Info::Log("");
-  }
-};
+    void Print();
+  };
 
-struct Keyframe
-{
-  XMFLOAT3 translation;
-  XMFLOAT3 scale;
-  XMFLOAT4 rotationQuat;
+  /// <summary>
+  /// Transformation data for one bone at one frame
+  /// </summary>
 
-  void Print()
+  struct Keyframe
   {
-    Info::Log("Trs:\t%f\t%f\t%f", translation.x, translation.y, translation.z);
-    Info::Log("Scl:\t%f\t%f\t%f", scale.x, scale.y, scale.z);
-    Info::Log("Rtt:\t%f\t%f\t%f\t%f", rotationQuat.x, rotationQuat.y, rotationQuat.z, rotationQuat.w);
-  }
-};
+    XMFLOAT3 translation;
+    XMFLOAT3 scale;
+    XMFLOAT4 rotationQuat;
 
-struct Frame
-{
-  float time;
-  map<Bone*, Keyframe> offsets;
+    void Print();
+  };
 
-  void Print()
+  /// <summary>
+  /// A key position of a skeleton in one frame with frame time
+  /// </summary>
+
+  struct Frame
   {
-    Info::Log("Frame time:\t%d", time);
-    map<Bone*, Keyframe>::iterator it;
-    for(it = offsets.begin(); it != offsets.end(); it++)
-    {
-      Info::Log("Bone:\t%s",it->first->name.c_str());
-      it->second.Print();
-    }
+    // Absolute time of this frame in animation
+    float time;
+    map<Bone*, Keyframe> offsets;
 
-    Info::Log("");
-  }
-};
+    void Print();
+  };
 
-class Animation
-{
-public:
-  Animation();
-  Animation(string aName, float aDuration, vector<Bone>* aBones,
-            vector<Frame> aFrames);
+  /// <summary>
+  /// Complete skeletal animation made of list of key frames
+  /// </summary>
 
-  bool IsOn() { return mIsOn; };
+  class Animation
+  {
+  public:
+    Animation();
+    Animation(string aName, float aDuration, vector<Bone>* aBones, vector<Frame> aFrames);
 
-  void Start();
-  void Stop();
-  void Reset();
+    bool IsOn()  { return mIsOn; }
+
+    void Start() { mIsOn = true; }
+    void Stop()  { mIsOn = false; }
+    void Reset();
   
-  void GetCurrentOffsets(XMFLOAT4X4* aOffsets);
-  UINT GetNumBones() { return mBones->size(); };
+    void GetCurrentOffsets(XMFLOAT4X4* aOffsets);
+    UINT GetNumBones() { return mBones->size(); }
   
-  void Tick(float dt);
+    void Tick(float dt);
 
-private: 
-  string mName;
-  Bone* mBoneRoot;
-  vector<Bone>* mBones;
+  private: 
+    string mName;
+    Bone* mBoneRoot;
+    vector<Bone>* mBones;
   
-  bool  mIsOn;
-  float mDuration;
-  float mTime;
-  UINT  miFrame;
-  vector<Frame> mFrames;
+    bool  mIsOn;
+    float mDuration;
+    float mTime;
+    UINT  miFrame;
+    vector<Frame> mFrames;
 
-  int GetNumBone(Bone* aBone);
-  void UpdateToRoot(Bone* aBone);
-  XMMATRIX GetInterpolatedOffset(Bone* aBone);
-};
+    int GetNumBone(Bone* aBone);
+    void UpdateToRoot(Bone* aBone);
+    XMMATRIX GetInterpolatedOffset(Bone* aBone);
+  };
+
+}

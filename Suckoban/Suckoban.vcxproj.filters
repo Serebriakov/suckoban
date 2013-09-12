@@ -11,6 +11,12 @@
     <Filter Include="FX">
       <UniqueIdentifier>{e5e0b82f-bde7-46c9-861d-bfb01fe1b2e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gine\Internal">
+      <UniqueIdentifier>{a7a2db0c-ce03-4375-8665-98d873ed9cdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gine\ToRefac">
+      <UniqueIdentifier>{b8f13c3c-3fec-4db4-9cdb-96f9c873a907}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\gine\Animation.h">
@@ -19,22 +25,7 @@
     <ClInclude Include="code\gine\Camera.h">
       <Filter>Gine</Filter>
     </ClInclude>
-    <ClInclude Include="code\gine\d3dApp.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\d3dUtil.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\d3dx11effect.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\Effects.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
     <ClInclude Include="code\gine\Font.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\FontSheet.h">
       <Filter>Gine</Filter>
     </ClInclude>
     <ClInclude Include="code\gine\FontText.h">
@@ -82,9 +73,6 @@
     <ClInclude Include="code\gine\Sprite.h">
       <Filter>Gine</Filter>
     </ClInclude>
-    <ClInclude Include="code\gine\SpriteBatch.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
     <ClInclude Include="code\gine\Text.h">
       <Filter>Gine</Filter>
     </ClInclude>
@@ -118,6 +106,24 @@
     <ClInclude Include="code\LevelPause.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="code\gine\d3dUtil.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\d3dApp.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\d3dx11effect.h">
+      <Filter>Gine\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Effects.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\FontSheet.h">
+      <Filter>Gine\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\SpriteBatch.h">
+      <Filter>Gine\Internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -129,19 +135,7 @@
     <ClCompile Include="code\gine\Camera.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
-    <ClCompile Include="code\gine\d3dApp.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\d3dUtil.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\Effects.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
     <ClCompile Include="code\gine\Font.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\FontSheet.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
     <ClCompile Include="code\gine\FontText.cpp">
@@ -186,9 +180,6 @@
     <ClCompile Include="code\gine\Sprite.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
-    <ClCompile Include="code\gine\SpriteBatch.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
     <ClCompile Include="code\gine\Text.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
@@ -206,6 +197,21 @@
     </ClCompile>
     <ClCompile Include="code\State.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\d3dUtil.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\d3dApp.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Effects.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\FontSheet.cpp">
+      <Filter>Gine\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\SpriteBatch.cpp">
+      <Filter>Gine\Internal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
