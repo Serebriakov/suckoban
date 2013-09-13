@@ -7,8 +7,6 @@
 #include "RenderStates.h"
 #include "Model.h"
 #include "Sprite.h"
-#include "FontText.h"
-#include "SpriteBatch.h"
 #include "Input.h"
 
 namespace Gine
@@ -25,34 +23,29 @@ namespace Gine
   bool Init()
   {
     Info::Log("Init Gine...");
+
+    // Modules to refactor
     Effects::InitAll(gDevice);
     InputLayouts::InitAll(gDevice);
     RenderStates::InitAll(gDevice);
-    Model::Init();
-    Input::Init();
+
+    if(!Model::Init())
+    {
+      Info::Fatal("Model module init failed");
+      return false;
+    }
+
+    if(!Input::Init())
+    {
+      Info::Fatal("Input module init failed");
+      return false;
+    }
 
     if(!Sprite::Init())
     {
-      Info::Fatal("Sprite init failed");
+      Info::Fatal("Sprite module init failed");
       return false;
     }
-   // ParticleSystem::Init(md3dDevice, md3dImmediateContext);
-    //HR(mSpriteBatch.Initialize(gDevice));
-
-    HRESULT result = FontText::Init(gDevice, gContext);
-    if(!result)
-    {
-      Info::Fatal("FontText init failed");
-      return false;
-    }
-
-   // Info::Log("* init sounds");
-   // result = Sound::Init();
-   // if(!result) 
-   // {
-   //   Info::Fatal("Sound init failed");
-   //   return false;
-   // }
 
     return true;
   }
@@ -63,7 +56,6 @@ namespace Gine
     InputLayouts::DestroyAll();
     RenderStates::DestroyAll();
     Sprite::Destroy();
-    //Sound::Destroy();
   }
 
   void ClearRTVAndDSV(const XMVECTORF32* color)

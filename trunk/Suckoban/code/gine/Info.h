@@ -1,14 +1,17 @@
 #pragma once
-
-#include <string>
 #include "d3dUtil.h"
-using std::string;
-using std::wstring;
 
-#define DISABLE_MSG false
+/// <summary> Disable message boxes from showing up </summary>
+const bool DISABLE_MSG = false;
 
 namespace Gine
 {
+  /// <summary>
+  /// Shows logs in console and fatal errors in message boxes. 
+  /// TODO: Print logs to a file
+  ///       Fix before publishing Suckoban
+  /// </summary>
+
   class Info
   {
   public:
@@ -20,7 +23,5 @@ namespace Gine
 
   private:
     Info() { };
-
-    static wstring StringToWString(const string s);
   };
 }
