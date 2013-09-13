@@ -2,7 +2,10 @@
 #include <Windows.h>
 #include <io.h>
 #include <fcntl.h>
-using Gine::Info;
+#include "GineUtils.h"
+using std::string;
+using std::wstring;
+using namespace Gine;
 
 void Info::ShowConsole()
 {
@@ -45,8 +48,7 @@ void Info::Fatal(const char* aText, ...)
   Log(buff);
 
   if(!DISABLE_MSG)
-    MessageBox(0, StringToWString(buff).c_str(), L"Fatal error", 
-               MB_OK | MB_ICONERROR);
+    MessageBox(0, Utils::ToWString(&string(buff)).c_str(), L"Fatal error", MB_OK | MB_ICONERROR);
 }
 
 void Info::Print(XMFLOAT4X4& aMatrix)
@@ -55,10 +57,4 @@ void Info::Print(XMFLOAT4X4& aMatrix)
   Info::Log("%f\t%f\t%f\t%f", aMatrix._21, aMatrix._22, aMatrix._23, aMatrix._24);
   Info::Log("%f\t%f\t%f\t%f", aMatrix._31, aMatrix._32, aMatrix._33, aMatrix._34);
   Info::Log("%f\t%f\t%f\t%f", aMatrix._41, aMatrix._42, aMatrix._43, aMatrix._44);
-}
-
-wstring Info::StringToWString(const string s)
-{
-  wstring wsTmp(s.begin(), s.end());
-  return wsTmp;
 }

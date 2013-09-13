@@ -7,44 +7,56 @@
 #include "Texture.h"
 using namespace std;
 
-struct MaterialColors
+namespace Gine
 {
-	MaterialColors() { ZeroMemory(this, sizeof(this)); }
-  MaterialColors(XMFLOAT4 aAmbient, XMFLOAT4 aDiffuse, XMFLOAT4 aSpecular)
-    : Ambient(aAmbient), Diffuse(aDiffuse), Specular(aSpecular)
-  {}
+  /// <summary> 
+  /// Storing ambient, diffuse and specular colors
+  /// </summary>
 
-	XMFLOAT4 Ambient;
-	XMFLOAT4 Diffuse;
-	XMFLOAT4 Specular;
-};
+  struct MaterialColors
+  {
+	  MaterialColors() { ZeroMemory(this, sizeof(this)); }
+    MaterialColors(XMFLOAT4 aAmbient, XMFLOAT4 aDiffuse, XMFLOAT4 aSpecular)
+      : Ambient(aAmbient), Diffuse(aDiffuse), Specular(aSpecular) {}
 
-class Material
-{
-public:
-  // A little trick for granting access from map [] operator to Material
-  friend class map<string, Material>;
+	  XMFLOAT4 Ambient;
+	  XMFLOAT4 Diffuse;
+	  XMFLOAT4 Specular;
+  };
 
-  static map<string, Material> All;
-  static Material* New(const char* aName);
-  static Material* New(const char* aName, XMFLOAT4 aAmbient, XMFLOAT4 aDiffuse,
-                       XMFLOAT4 aSpecular, const char* aTextureName);
-  static Material* Get(const char* aName);
+  /// <summary>
+  /// A model's material
+  /// Singleton materials container
+  /// </summary>
+
+  class Material
+  {
+  public:
+    // A little trick for granting access from map [] operator to Material
+    friend class map<string, Material>;
+
+    static map<string, Material> All;
+    static Material* New(const char* aName);
+    static Material* New(const char* aName, XMFLOAT4 aAmbient, XMFLOAT4 aDiffuse, XMFLOAT4 aSpecular,
+                         const char* aTextureName);
+    static Material* Get(const char* aName);
   
-  void Init();
+    void Init();
 
-  ~Material();
+    ~Material();
 
-  string GetName(){ return mName;};
+    string GetName() { return mName;};
 
-  MaterialColors materialColors;
-  bool transparent;
+    MaterialColors materialColors;
+    bool transparent;
   
-	bool hasTexture;
-	Texture* texture;
+	  bool hasTexture;
+	  Texture* texture;
 
-private:
-  Material();
+  private:
+    Material();
 
-  string mName;
-};
+    string mName;
+  };
+
+}

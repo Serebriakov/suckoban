@@ -28,15 +28,6 @@
     <ClInclude Include="code\gine\Font.h">
       <Filter>Gine</Filter>
     </ClInclude>
-    <ClInclude Include="code\gine\FontText.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\GameTimer.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\GeometryGenerator.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
     <ClInclude Include="code\gine\Gine.h">
       <Filter>Gine</Filter>
     </ClInclude>
@@ -49,13 +40,7 @@
     <ClInclude Include="code\gine\Input.h">
       <Filter>Gine</Filter>
     </ClInclude>
-    <ClInclude Include="code\gine\LightHelper.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
     <ClInclude Include="code\gine\Material.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\MathHelper.h">
       <Filter>Gine</Filter>
     </ClInclude>
     <ClInclude Include="code\gine\Mesh.h">
@@ -124,6 +109,18 @@
     <ClInclude Include="code\gine\SpriteBatch.h">
       <Filter>Gine\Internal</Filter>
     </ClInclude>
+    <ClInclude Include="code\gine\GameTimer.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\GeometryGenerator.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\LightHelper.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\MathHelper.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -138,15 +135,6 @@
     <ClCompile Include="code\gine\Font.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
-    <ClCompile Include="code\gine\FontText.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\GameTimer.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\GeometryGenerator.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
     <ClCompile Include="code\gine\Gine.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
@@ -159,13 +147,7 @@
     <ClCompile Include="code\gine\Input.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
-    <ClCompile Include="code\gine\LightHelper.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
     <ClCompile Include="code\gine\Material.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\MathHelper.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
     <ClCompile Include="code\gine\Mesh.cpp">
@@ -212,6 +194,18 @@
     </ClCompile>
     <ClCompile Include="code\gine\SpriteBatch.cpp">
       <Filter>Gine\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\GameTimer.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\GeometryGenerator.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\LightHelper.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\MathHelper.cpp">
+      <Filter>Gine\ToRefac</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

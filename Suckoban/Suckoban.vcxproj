@@ -45,6 +45,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,7 +74,6 @@
     <ClInclude Include="code\gine\Effects.h" />
     <ClInclude Include="code\gine\Font.h" />
     <ClInclude Include="code\gine\FontSheet.h" />
-    <ClInclude Include="code\gine\FontText.h" />
     <ClInclude Include="code\gine\GameTimer.h" />
     <ClInclude Include="code\gine\GeometryGenerator.h" />
     <ClInclude Include="code\gine\Gine.h" />
@@ -108,7 +108,6 @@
     <ClCompile Include="code\gine\Effects.cpp" />
     <ClCompile Include="code\gine\Font.cpp" />
     <ClCompile Include="code\gine\FontSheet.cpp" />
-    <ClCompile Include="code\gine\FontText.cpp" />
     <ClCompile Include="code\gine\GameTimer.cpp" />
     <ClCompile Include="code\gine\GeometryGenerator.cpp" />
     <ClCompile Include="code\gine\Gine.cpp" />
