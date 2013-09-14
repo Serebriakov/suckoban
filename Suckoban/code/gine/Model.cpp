@@ -13,6 +13,7 @@ using namespace Gine;
 
 const int MAX_INSTANCES = 200;
 const BYTE MAX_BONES = 96;
+const char* MODELS_PATH = "data/gfx/models/";
 const char* FILE_FORMATS[2] = {".obj", ".x"};
 const int N_FILE_FORMATS = sizeof(FILE_FORMATS) / sizeof(const char*);
 
@@ -57,7 +58,7 @@ Model Model::Get(const char* aName)
 
 bool Model::Load(const char* aName)
 {
-  string path = "data/gfx/models/";
+  string path = MODELS_PATH;
   path += aName;
 
   Model model;
@@ -81,9 +82,7 @@ bool Model::Load(const char* aName)
   return false;
 }
 
-void Model::Draw(vector<Model*>* aRenderList,
-                 ID3DX11EffectTechnique* aBasicTech,
-                 ID3DX11EffectTechnique* aInstancedTech)
+void Model::Draw(vector<Model*>* aRenderList, ID3DX11EffectTechnique* aBasicTech, ID3DX11EffectTechnique* aInstancedTech)
 {
   if(aRenderList->size() == 0)
     return;
@@ -93,8 +92,7 @@ void Model::Draw(vector<Model*>* aRenderList,
     return;
   }
 
-  // TODO
-  // sort renderlist by meshes
+  // TODO: Sort renderlist by meshes
   
   vector<Model*>& rl = *aRenderList;
   Mesh* mesh = rl[0]->mMesh;
@@ -129,8 +127,7 @@ void Model::Draw(vector<Model*>* aRenderList,
   DrawSingle(&singlesList, aBasicTech);
 }
 
-void Model::DrawSingle(vector<Model*>* aRenderList,
-                       ID3DX11EffectTechnique* aTech)
+void Model::DrawSingle(vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTech)
 {
   if(aRenderList->size() == 0)
     return;
@@ -150,25 +147,22 @@ void Model::DrawSingle(vector<Model*>* aRenderList,
 
   XMMATRIX view = gCamera->View();
   XMMATRIX viewProj = gCamera->ViewProj();
-  bool isSsaoTech = Effects::SsaoNormalDepthFX->NormalDepthAlphaClipTech == 
-    aTech || Effects::SsaoNormalDepthFX->NormalDepthTech == aTech;
+  bool isSsaoTech = Effects::SsaoNormalDepthFX->NormalDepthAlphaClipTech == aTech ||
+                    Effects::SsaoNormalDepthFX->NormalDepthTech == aTech;
   for(UINT i=0; i<rl.size(); i++)
   {
     Model& model = *rl[i];
 
-    if(isSsaoTech && !model.castSsao)
+    if(isSsaoTech && !model.CastSsao)
       continue;
 
     for(UINT p=0; p<techDesc.Passes; p++)
     {
       ID3DX11EffectPass* pass = aTech->GetPassByIndex(p);
-      Gine::gContext->IASetVertexBuffers(0, 1, &model.mMesh->mVertexBuffer,
-                                         &stride, &offset);
-      Gine::gContext->IASetIndexBuffer(model.mMesh->mIndexBuffer, 
-                                       DXGI_FORMAT_R32_UINT, 0);
+      Gine::gContext->IASetVertexBuffers(0, 1, &model.mMesh->VertexBuffer, &stride, &offset);
+      Gine::gContext->IASetIndexBuffer(model.mMesh->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-      //XMMATRIX world = XMLoadFloat4x4(&model.mMesh->mWorld) *
-      //                 model.GetWorldMatrix();
+      //XMMATRIX world = XMLoadFloat4x4(&model.mMesh->mWorld) * model.GetWorldMatrix();
       XMMATRIX world = model.GetWorldMatrix();
       XMMATRIX worldView = world * view;
       XMMATRIX worldViewProj = world * viewProj;
@@ -179,13 +173,11 @@ void Model::DrawSingle(vector<Model*>* aRenderList,
 			  XMMATRIX worldInvTransposeView = worldInvTranspose * view;
 
 			  Effects::SsaoNormalDepthFX->SetWorldView(worldView);
-			  Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(
-          worldInvTransposeView);
+			  Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 			  Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
 			  Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
         if(model.mMaterials.size() > 1)
-          Effects::SsaoNormalDepthFX->SetDiffuseMap(
-            model.mMaterials[1]->texture->diffuse);
+          Effects::SsaoNormalDepthFX->SetDiffuseMap(model.mMaterials[1]->texture->diffuse);
       }
       else
       {
@@ -196,26 +188,21 @@ void Model::DrawSingle(vector<Model*>* aRenderList,
         Effects::BasicFX->SetWorldViewProjTex(worldViewProj * toTexSpace);
 
         XMFLOAT4X4 offsets[MAX_BONES];
-        UINT numBones = model.mMesh->GetCurrentAnimationPose(offsets);
+        UINT numBones = model.mMesh->GetCurrentAnimationPose(*offsets);
         Effects::BasicFX->SetBoneTransforms(offsets, numBones);
       }
 
-      for(int i=0; i<model.mMesh->mSubsets; i++)
+      for(int i=0; i<model.mMesh->Subsets; i++)
       {
-        int indexStart = model.mMesh->mSubsetIndexStart[i];
-        int indexDrawAmount = model.mMesh->mSubsetIndexStart[i+1] -
-                              model.mMesh->mSubsetIndexStart[i];
+        int indexStart = model.mMesh->SubsetIndexStart[i];
+        int indexDrawAmount = model.mMesh->SubsetIndexStart[i+1] - model.mMesh->SubsetIndexStart[i];
 
         if(!isSsaoTech)
         {
-          Effects::BasicFX->SetMaterialColors(
-            model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
-          Effects::BasicFX->SetDiffuseMap(
-            model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
-          Effects::BasicFX->SetBumpMap(
-            model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
-          Effects::BasicFX->SetSpecularMap(
-            model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
+          Effects::BasicFX->SetMaterialColors(model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
+          Effects::BasicFX->SetDiffuseMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
+          Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
+          Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
 		      Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
         }
 
@@ -226,8 +213,7 @@ void Model::DrawSingle(vector<Model*>* aRenderList,
   }
 }
 
-void Model::DrawInstanced(vector<Model*>* aRenderList,
-                          ID3DX11EffectTechnique* aTech)
+void Model::DrawInstanced(vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTech)
 {
   if(aRenderList->size() == 0)
     return;
@@ -259,7 +245,7 @@ void Model::DrawInstanced(vector<Model*>* aRenderList,
   UINT stride[2] = {sizeof(Vertex::Basic32), sizeof(InstancedData)};
   UINT offset[2] = {0,0};
 
-  ID3D11Buffer* vbs[2] = {model.mMesh->mVertexBuffer, mInstancedBuffer};
+  ID3D11Buffer* vbs[2] = {model.mMesh->VertexBuffer, mInstancedBuffer};
 
   XMMATRIX view = gCamera->View();
   XMMATRIX viewProj = gCamera->ViewProj();
@@ -271,10 +257,9 @@ void Model::DrawInstanced(vector<Model*>* aRenderList,
   {
     ID3DX11EffectPass* pass = aTech->GetPassByIndex(p);
     Gine::gContext->IASetVertexBuffers(0, 2, vbs, stride, offset);
-    Gine::gContext->IASetIndexBuffer(model.mMesh->mIndexBuffer, 
-                                     DXGI_FORMAT_R32_UINT, 0);
+    Gine::gContext->IASetIndexBuffer(model.mMesh->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-    XMMATRIX world = XMLoadFloat4x4(&model.mMesh->mWorld);
+    XMMATRIX world = XMLoadFloat4x4(&model.mMesh->World);
     XMMATRIX worldView = world * view;
     XMMATRIX worldViewProj = world * viewProj;
     XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
@@ -285,25 +270,19 @@ void Model::DrawInstanced(vector<Model*>* aRenderList,
     Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
     Effects::BasicFX->SetWorldViewProjTex(toTexSpace);
 
-    for(int i=0; i<model.mMesh->mSubsets; i++)
+    for(int i=0; i<model.mMesh->Subsets; i++)
     {
-      int indexStart = model.mMesh->mSubsetIndexStart[i];
-      int indexDrawAmount = model.mMesh->mSubsetIndexStart[i+1] -
-                            model.mMesh->mSubsetIndexStart[i];
+      int indexStart = model.mMesh->SubsetIndexStart[i];
+      int indexDrawAmount = model.mMesh->SubsetIndexStart[i+1] - model.mMesh->SubsetIndexStart[i];
 
-      Effects::BasicFX->SetMaterialColors(
-        model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
-      Effects::BasicFX->SetDiffuseMap(
-        model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
-      Effects::BasicFX->SetBumpMap(
-        model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
-      Effects::BasicFX->SetSpecularMap(
-        model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
+      Effects::BasicFX->SetMaterialColors(model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
+      Effects::BasicFX->SetDiffuseMap( model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
+      Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
+      Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
 		  Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
 
       pass->Apply(0, Gine::gContext);
-      Gine::gContext->DrawIndexedInstanced(indexDrawAmount, aRenderList->size(), 
-                                           indexStart, 0, 0);
+      Gine::gContext->DrawIndexedInstanced(indexDrawAmount, aRenderList->size(), indexStart, 0, 0);
     }
   }
 }
@@ -319,8 +298,8 @@ void Model::Reset()
   mCastShadow = false;
   mMesh       = 0;
   mParent     = 0;
-  isInFrustum = true;
-  castSsao    = true;
+  InFrustum   = true;
+  CastSsao    = true;
 
   mScale    = XMFLOAT3(1.0f,1.0f,1.0f);
   mRotation = XMFLOAT3(0.0f,0.0f,0.0f);
@@ -378,10 +357,8 @@ XMMATRIX Model::GetWorldMatrix()
     if(mParent)
       W *= mParent->GetWorldMatrix();
     XMStoreFloat4x4(&mWorldMatrix, W);
-    XMStoreFloat4x4(&mWorldInverseMatrix,
-                    XMMatrixInverse(&XMMatrixDeterminant(W), W));
-    XMStoreFloat4x4(&mWorldInverseTransposeMatrix,
-                    MathHelper::InverseTranspose(W));
+    XMStoreFloat4x4(&mWorldInverseMatrix, XMMatrixInverse(&XMMatrixDeterminant(W), W));
+    XMStoreFloat4x4(&mWorldInverseTransposeMatrix, MathHelper::InverseTranspose(W));
 
     mUpdateScale    = false;
     mUpdateRotation = false;
@@ -394,12 +371,12 @@ XMMATRIX Model::GetWorldMatrix()
   return XMLoadFloat4x4(&mWorldMatrix);
 }
 
-XMFLOAT4 aiColor42XMFLOAT4(aiColor4D aCol)
+XMFLOAT4 ToXMFLOAT4(aiColor4D aCol)
 {
   return XMFLOAT4(aCol.r,aCol.g,aCol.b,aCol.a);
 }
 
-XMFLOAT4X4 aiMatrix4x42XMFLOAT4X4(aiMatrix4x4 aMatrix)
+XMFLOAT4X4 ToXMFLOAT4X4(aiMatrix4x4 aMatrix)
 {
   XMMATRIX M = XMLoadFloat4x4(&XMFLOAT4X4(&aMatrix.a1));
   XMFLOAT4X4 FM;
@@ -407,19 +384,17 @@ XMFLOAT4X4 aiMatrix4x42XMFLOAT4X4(aiMatrix4x4 aMatrix)
   return FM;
 }
 
-XMFLOAT3X3 aiMatrix3x32XMFLOAT3X3(aiMatrix3x3 aMatrix)
+XMFLOAT3X3 ToXMFLOAT3X3(aiMatrix3x3 aMatrix)
 {
   XMMATRIX M = XMLoadFloat3x3(&XMFLOAT3X3(&aMatrix.a1));
   XMFLOAT3X3 FM;
   XMStoreFloat3x3(&FM, XMMatrixTranspose(M));
   return FM;
-  //return XMFLOAT3X3(&aMatrix.a1);
 }
 
 bool Model::LoadFile(const char* aFileName)
 {
-  const aiScene* scene = aiImportFile(aFileName, aiProcess_ConvertToLeftHanded |
-                                      aiProcess_CalcTangentSpace);
+  const aiScene* scene = aiImportFile(aFileName, aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace);
 
   if(scene)
   {
@@ -452,21 +427,16 @@ bool Model::LoadFile(const char* aFileName)
         hasTexture = true;
       }
 
-      Material* mtl = Material::New(name.C_Str(),
-        aiColor42XMFLOAT4(ambient),
-        aiColor42XMFLOAT4(diffuse),
-        aiColor42XMFLOAT4(specular),
-        hasTexture ? textureName.C_Str() : 0);
+      Material* mtl = Material::New(name.C_Str(), ToXMFLOAT4(ambient), ToXMFLOAT4(diffuse), ToXMFLOAT4(specular),
+                                    hasTexture ? textureName.C_Str() : 0);
       mMaterials.push_back(mtl);
 
       mtl->materialColors.Ambient = mtl->materialColors.Diffuse;
     }
 
     // Mesh subsets
-    XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity,
-                    +MathHelper::Infinity);
-    XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity,
-                    -MathHelper::Infinity);
+    XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
+    XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
     XMVECTOR vMin = XMLoadFloat3(&vMinf3);
     XMVECTOR vMax = XMLoadFloat3(&vMaxf3);
     for(unsigned int i=0; i<scene->mNumMeshes; i++)
@@ -476,8 +446,8 @@ bool Model::LoadFile(const char* aFileName)
       // Vertex
       int vertexOff = vertices.size();
       unsigned int numVertices = mesh->mNumVertices;
-      mMesh->mSubsetIndexStart.push_back(vertexOff);
-      mMesh->mSubsets++;
+      mMesh->SubsetIndexStart.push_back(vertexOff);
+      mMesh->Subsets++;
 
       for(unsigned int i_vert = 0; i_vert < numVertices; i_vert++)
       {
@@ -519,27 +489,25 @@ bool Model::LoadFile(const char* aFileName)
       if(mesh->HasBones() && !LoadBones(scene, mesh, &vertices, vertexOff))
         return false;
     }
-    mMesh->mSubsetIndexStart.push_back(vertices.size());
+    mMesh->SubsetIndexStart.push_back(vertices.size());
     
-    mMesh->mVertices = vertices.size();
-    mMesh->mIndices = indices.size();
+    mMesh->Vertices = vertices.size();
+    mMesh->Indices = indices.size();
 
     // Bounding volumes
-    mMesh->mAxisAlignedBoundingBox = new AxisAlignedBox();
-    mMesh->mBoundingSphere = new Sphere();
+    mMesh->BoundingBox = new AxisAlignedBox();
+    mMesh->BoundingSphere = new Sphere();
     XMVECTOR center = 0.5f * (vMin + vMax);
-    XMStoreFloat3(&mMesh->mAxisAlignedBoundingBox->Center, center);
-    XMStoreFloat3(&mMesh->mAxisAlignedBoundingBox->Extents,
-                  0.5f * (vMax - vMin));
+    XMStoreFloat3(&mMesh->BoundingBox->Center, center);
+    XMStoreFloat3(&mMesh->BoundingBox->Extents, 0.5f * (vMax - vMin));
     XMVECTOR maxDistance = XMVectorReplicate(0.0f);
     for(UINT i=0; i<vertices.size(); i++)
     {
-      XMVECTOR distance = XMVector3Length(XMLoadFloat3(&vertices[i].Pos) -
-                                          center);
+      XMVECTOR distance = XMVector3Length(XMLoadFloat3(&vertices[i].Pos) - center);
       maxDistance = XMVectorGreater(maxDistance, distance);
     }
-    mMesh->mBoundingSphere->Center = mMesh->mAxisAlignedBoundingBox->Center;
-    mMesh->mBoundingSphere->Radius = XMVectorGetX(maxDistance);
+    mMesh->BoundingSphere->Center = mMesh->BoundingBox->Center;
+    mMesh->BoundingSphere->Radius = XMVectorGetX(maxDistance);
 
     // Animations
     // 1. Every bone is keyed for every keyframe
@@ -550,23 +518,23 @@ bool Model::LoadFile(const char* aFileName)
     // Buffers
     D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(Vertex::Basic32) * mMesh->mVertices;
+    vbd.ByteWidth = sizeof(Vertex::Basic32) * mMesh->Vertices;
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vbd.CPUAccessFlags = 0;
     vbd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = &vertices[0];
-    HR(Gine::gDevice->CreateBuffer(&vbd, &vinitData, &mMesh->mVertexBuffer));
+    HR(Gine::gDevice->CreateBuffer(&vbd, &vinitData, &mMesh->VertexBuffer));
 
     D3D11_BUFFER_DESC ibd;
     ibd.Usage = D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(UINT) * mMesh->mIndices;
+    ibd.ByteWidth = sizeof(UINT) * mMesh->Indices;
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.CPUAccessFlags = 0;
     ibd.MiscFlags = 0;
     D3D11_SUBRESOURCE_DATA iinitData;
     iinitData.pSysMem = &indices[0];
-    HR(Gine::gDevice->CreateBuffer(&ibd, &iinitData, &mMesh->mIndexBuffer));
+    HR(Gine::gDevice->CreateBuffer(&ibd, &iinitData, &mMesh->IndexBuffer));
 
     return true;
   }
@@ -593,25 +561,24 @@ void Model::CopyWithoutTransformations(const Model& aModel)
   mSubsetMaterial = aModel.mSubsetMaterial;
   mParent         = aModel.mParent;
   mCastShadow     = aModel.mCastShadow;
-  castSsao        = aModel.castSsao;
-  isInFrustum     = aModel.isInFrustum;
+  CastSsao        = aModel.CastSsao;
+  InFrustum       = aModel.InFrustum;
 }
 
 void Model::AnimationStart(string aName)
 {
-  if(!mMesh->mAnimations.count(aName))
-    Info::Fatal("Couldn't find animation \"%s\" for \"%s\" model", 
-                aName.c_str(), mName.c_str());
+  if(!mMesh->Animations.count(aName))
+    Info::Fatal("Couldn't find animation \"%s\" for \"%s\" model", aName.c_str(), mName.c_str());
   else
   {
     mMesh->StopAllAnimations();
-    mMesh->StartAnimation(aName);
+    mMesh->StartAnimation(&aName);
   }
 }
 
 void Model::AnimationStop(string aName)
 {
-  mMesh->mAnimations[aName].Stop();
+  mMesh->Animations[aName].Stop();
 }
 
 void Model::Tick(float dt)
@@ -619,12 +586,11 @@ void Model::Tick(float dt)
   mMesh->Tick(dt);
 }
 
-bool Model::LoadBones(const aiScene* aScene, aiMesh* aMesh,
-                      vector<Vertex::Basic32>* aVertices, int aVertexOff)
+bool Model::LoadBones(const aiScene* aScene, aiMesh* aMesh, vector<Vertex::Basic32>* aVertices, int aVertexOff)
 {
   UINT numBones = aMesh->mNumBones;
   vector<string> boneParentNames;
-  vector<Bone>& bones = mMesh->mBones;
+  vector<Bone>& bones = mMesh->Bones;
 
   for(UINT j=0; j<numBones; j++)
   {
@@ -633,10 +599,10 @@ bool Model::LoadBones(const aiScene* aScene, aiMesh* aMesh,
     aiNode& boneNode = *aScene->mRootNode->FindNode(boneData.mName);
 
     string     boneName = boneData.mName.C_Str();
-    XMFLOAT4X4 boneOffset = aiMatrix4x42XMFLOAT4X4(boneData.mOffsetMatrix);
-    XMFLOAT4X4 boneToParent = aiMatrix4x42XMFLOAT4X4(boneNode.mTransformation);
+    XMFLOAT4X4 boneOffset = ToXMFLOAT4X4(boneData.mOffsetMatrix);
+    XMFLOAT4X4 boneToParent = ToXMFLOAT4X4(boneNode.mTransformation);
 
-    // Create bone and add to skeleton
+    // Create bone and add to a skeleton
     Bone bone = { boneName, boneOffset, boneToParent, 0 };
     bones.push_back(bone);
 
@@ -698,7 +664,7 @@ bool Model::LoadAnimations(const aiScene* aScene)
     vector<string> boneNames;
     vector<float> frameTimes;
 
-    if(anim.mNumChannels != mMesh->mBones.size())
+    if(anim.mNumChannels != mMesh->Bones.size())
     {
       Info::Fatal("Number of animation channels is different than bones number");
       return false;
@@ -761,7 +727,7 @@ bool Model::LoadAnimations(const aiScene* aScene)
       for(UINT k=0; k<boneFrameOffset.size(); k++)
       {
         string boneName = boneNames[k];
-        Bone* bone = mMesh->GetBone(boneName);
+        Bone* bone = mMesh->GetBone(&boneName);
 
         frame.offsets[bone] = boneFrameOffset[k][i];
       }
@@ -771,9 +737,8 @@ bool Model::LoadAnimations(const aiScene* aScene)
 
     // Create mesh animation
     string animName = anim.mName.C_Str();
-    Animation animation(animName, anim.mDuration, &mMesh->mBones,
-                        frames);
-    mMesh->mAnimations[animName] = animation;
+    Animation animation(animName, anim.mDuration, &mMesh->Bones, frames);
+    mMesh->Animations[animName] = animation;
   }
 
   return true;

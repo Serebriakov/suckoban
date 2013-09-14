@@ -318,12 +318,12 @@ void Camera::Cull(vector<Model*>* aModels)
 
     if(!IntersectAxisAlignedBoxFrustum(rl[i]->GetAxisAlignedBoundingBox(), &localSpaceFrustum))
     {
-      rl[i]->isInFrustum = false;
+      rl[i]->InFrustum = false;
       rl.erase(rl.begin() + i);
       i--;
     }
     else
-      rl[i]->isInFrustum = true;
+      rl[i]->InFrustum = true;
   }
 }
 

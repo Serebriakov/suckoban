@@ -17,6 +17,9 @@
     <Filter Include="Gine\ToRefac">
       <UniqueIdentifier>{b8f13c3c-3fec-4db4-9cdb-96f9c873a907}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{81b46638-782f-4b58-b364-e4126c44c034}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\gine\Animation.h">
@@ -47,12 +50,6 @@
       <Filter>Gine</Filter>
     </ClInclude>
     <ClInclude Include="code\gine\Model.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\RenderStates.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\resource.h">
       <Filter>Gine</Filter>
     </ClInclude>
     <ClInclude Include="code\gine\Sprite.h">
@@ -121,6 +118,12 @@
     <ClInclude Include="code\gine\MathHelper.h">
       <Filter>Gine\ToRefac</Filter>
     </ClInclude>
+    <ClInclude Include="code\gine\RenderStates.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -154,9 +157,6 @@
       <Filter>Gine</Filter>
     </ClCompile>
     <ClCompile Include="code\gine\Model.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\RenderStates.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
     <ClCompile Include="code\gine\Sprite.cpp">
@@ -205,6 +205,9 @@
       <Filter>Gine\ToRefac</Filter>
     </ClCompile>
     <ClCompile Include="code\gine\MathHelper.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\RenderStates.cpp">
       <Filter>Gine\ToRefac</Filter>
     </ClCompile>
   </ItemGroup>

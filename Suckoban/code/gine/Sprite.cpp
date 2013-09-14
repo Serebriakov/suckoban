@@ -10,6 +10,8 @@ ID3D11Buffer* Sprite::mQuadVB = 0;
 ID3D11Buffer* Sprite::mQuadIB = 0;
 map<string, Sprite> Sprite::mSprites;
 
+const char* SPRITES_PATH = "data/gfx/sprites/";
+
 //------------------------------------------------------------------------------
 // PUBLIC STATIC
 //------------------------------------------------------------------------------
@@ -29,51 +31,52 @@ void Sprite::Destroy()
     ReleaseCOM(it->second.mSpriteSRV);
 }
 
-void Sprite::Draw(string aName, UINT aX, UINT aY)
+void Sprite::Draw(const char* name, UINT x, UINT y)
 {
-  if(mSprites.count(aName) || Load(aName))
+  if(mSprites.count(name) || Load(name))
   {
-    mSprites[aName].translate = XMFLOAT3(aX, aY, 0.0f);
-    mSprites[aName].Transform();
-    mSprites[aName].Draw();
+    mSprites[name].Translate = XMFLOAT3(x, y, 0.0f);
+    mSprites[name].Transform();
+    mSprites[name].Draw();
   }
 }
 
-void Sprite::Draw(string aName, UINT aX, UINT aY, float aScale)
+void Sprite::Draw(const char* name, UINT x, UINT y, float scale)
 {
-  if(mSprites.count(aName) || Load(aName))
+  if(mSprites.count(name) || Load(name))
   {
-    mSprites[aName].translate = XMFLOAT3(aX, aY, 0.0f);
-    mSprites[aName].scale = XMFLOAT3(aScale, aScale, 1.0f);
-    mSprites[aName].Transform();
-    mSprites[aName].Draw();
+    mSprites[name].Translate = XMFLOAT3(x, y, 0.0f);
+    mSprites[name].Scale = XMFLOAT3(scale, scale, 1.0f);
+    mSprites[name].Transform();
+    mSprites[name].Draw();
   }
 }
 
-bool Sprite::Load(string aName)
+bool Sprite::Load(const char* name)
 {
-  if(mSprites.count(aName))
+  if(mSprites.count(name))
     return true;
 
   Sprite sprite;
 
-  string path = "data/gfx/sprites/";
-  path += aName;
+  string path = SPRITES_PATH;
+  path += name;
+
+  // FIXME: Only pngs right now
   path += ".png";
   wchar_t fileName[1024];
   mbstowcs(fileName, path.c_str(), 1024);
   
-  HRESULT result = D3DX11CreateShaderResourceViewFromFile(
-    Gine::gDevice, fileName, 0, 0, &sprite.mSpriteSRV, 0);
+  HRESULT result = D3DX11CreateShaderResourceViewFromFile(Gine::gDevice, fileName, 0, 0, &sprite.mSpriteSRV, 0);
 
   if(FAILED(result))
   {
-    Info::Fatal("Couldn't load a %s sprite", aName.c_str());
+    Info::Fatal("Couldn't load a %s sprite", name);
     return false;
   }
 
   sprite.SetDimentions();
-  mSprites[aName] = sprite;
+  mSprites[name] = sprite;
   Info::Log("Sprite loaded: %s", path.c_str());
 
   return true;
@@ -87,9 +90,9 @@ Sprite::Sprite()
 {
   mSpriteSRV = 0;
   
-  scale = XMFLOAT3(1.0f,1.0f,1.0f);
-  rotate = XMFLOAT3(0.0f,0.0f,0.0f);
-  translate = XMFLOAT3(0.0f,0.0f,0.0f);
+  Scale     = XMFLOAT3(1.0f,1.0f,1.0f);
+  Rotate    = XMFLOAT3(0.0f,0.0f,0.0f);
+  Translate = XMFLOAT3(0.0f,0.0f,0.0f);
   XMStoreFloat4x4(&mWorld,XMMatrixIdentity());
 }
 
@@ -109,11 +112,9 @@ void Sprite::Draw()
 
   XMMATRIX identity = XMMatrixIdentity();
 
-  // World matrix does all the job 
-  // to output pixel-precise sprites transformation
+  // World matrix does all the job to output pixel-precise sprites transformation
   XMMATRIX world = XMLoadFloat4x4(&mWorld);
-  XMMATRIX screenScale = XMMatrixScaling(2.0f / Gine::gScreenW,
-                                         2.0f / Gine::gScreenH, 1.0f);
+  XMMATRIX screenScale = XMMatrixScaling(2.0f / Gine::gScreenW, 2.0f / Gine::gScreenH, 1.0f);
   XMMATRIX screenTranslate = XMMatrixTranslation(-1.0f, 1.0f, 0.0f);
   world *= screenScale * screenTranslate;
 
@@ -139,8 +140,7 @@ void Sprite::Draw()
     Gine::gContext->OMGetBlendState(&prevState, prevFactor, &prevMask); 
 
     // Render
-    Gine::gContext->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 
-                                    0xffffffff);
+    Gine::gContext->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
     spriteTech->GetPassByIndex(p)->Apply(0, Gine::gContext);
     Gine::gContext->DrawIndexed(6, 0, 0);
 
@@ -209,23 +209,21 @@ bool Sprite::BuildQuadGeometryBuffers()
 
 void Sprite::Transform()
 {
-  // Resize quad to pixel=-precize screen size
+  // Resize quad to pixel-precize screen size
   XMMATRIX screenTranslate = XMMatrixTranslation(1.0f, -1.0f, 0.0f);
-  XMMATRIX screenScale = XMMatrixScaling(Gine::gScreenW / 2.0f,
-                                         Gine::gScreenH / 2.0f, 1.0f);
+  XMMATRIX screenScale = XMMatrixScaling(Gine::gScreenW / 2.0f, Gine::gScreenH / 2.0f, 1.0f);
 
   // Resize quad to original sprite size
-  XMMATRIX spriteSize = XMMatrixScaling(size.x / Gine::gScreenW,
-                                        size.y / Gine::gScreenH, 1.0f);
-  XMMATRIX spriteScale = XMMatrixScalingFromVector(XMLoadFloat3(&scale));
+  XMMATRIX spriteSize = XMMatrixScaling(Size.x / Gine::gScreenW, Size.y / Gine::gScreenH, 1.0f);
+  XMMATRIX spriteScale = XMMatrixScalingFromVector(XMLoadFloat3(&Scale));
 
   XMMATRIX S = screenTranslate * screenScale * spriteSize * spriteScale;
-  XMMATRIX RX = XMMatrixRotationX(rotate.x);
-  XMMATRIX RY = XMMatrixRotationY(rotate.y);
-  XMMATRIX RZ = XMMatrixRotationZ(rotate.z);
+  XMMATRIX RX = XMMatrixRotationX(Rotate.x);
+  XMMATRIX RY = XMMatrixRotationY(Rotate.y);
+  XMMATRIX RZ = XMMatrixRotationZ(Rotate.z);
   XMMATRIX R = RX*RY*RZ;
-  translate.y *= -1.0f;
-  XMMATRIX T = XMMatrixTranslationFromVector(XMLoadFloat3(&translate));
+  Translate.y *= -1.0f;
+  XMMATRIX T = XMMatrixTranslationFromVector(XMLoadFloat3(&Translate));
   
   XMStoreFloat4x4(&mWorld, S*R*T);
 }
@@ -241,6 +239,6 @@ void Sprite::SetDimentions()
     mSpriteSRV->GetResource(&resource);
     texResource = reinterpret_cast<ID3D11Texture2D*>(resource);
     texResource->GetDesc(&desc);
-    size = XMFLOAT2(static_cast<float>(desc.Width), static_cast<float>(desc.Height));
+    Size = XMFLOAT2(static_cast<float>(desc.Width), static_cast<float>(desc.Height));
   }
 }

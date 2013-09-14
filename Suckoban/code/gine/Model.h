@@ -10,10 +10,19 @@ namespace Gine
 {
   class Camera;
 
+  /// <summary> 
+  /// Different transformations for the same mesh for instanced rendering
+  /// </summary>
+
   struct InstancedData
   {
 	  XMFLOAT4X4 World;
   };
+
+  /// <summary>  
+  /// One instance of a 3D model
+  /// Singleton models conatiner
+  /// </summary>
 
   class Model
   {
@@ -30,11 +39,12 @@ namespace Gine
     static void  DrawSingle    (vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTech);
     static void  DrawInstanced (vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTech);
 
-    bool isInFrustum;
-    bool castSsao;
-
     Model();
     ~Model();
+
+    // Effects
+    bool InFrustum;
+    bool CastSsao;
 
     // Direct access
     XMFLOAT3& Scale()    { mUpdateScale    = true; return mScale;    }
@@ -42,18 +52,18 @@ namespace Gine
     XMFLOAT3& Position() { mUpdatePosition = true; return mPosition; }
 
     // Getters
-    string   GetName()     { return mName;     }
-    XMFLOAT3 GetScale()    { return mScale;    }
-    XMFLOAT3 GetRotation() { return mRotation; }
-    XMFLOAT3 GetPosition() { return mPosition; }
-    XMMATRIX GetScaleMatrix()    { return XMLoadFloat4x4(&mScaleMatrix);    }
-    XMMATRIX GetRotationMatrix() { return XMLoadFloat4x4(&mRotationMatrix); }
-    XMMATRIX GetPositionMatrix() { return XMLoadFloat4x4(&mPositionMatrix); }
+    string   GetName() const           { return mName;     }
+    XMFLOAT3 GetScale() const          { return mScale;    }
+    XMFLOAT3 GetRotation() const       { return mRotation; }
+    XMFLOAT3 GetPosition() const       { return mPosition; }
+    XMMATRIX GetScaleMatrix() const    { return XMLoadFloat4x4(&mScaleMatrix);    }
+    XMMATRIX GetRotationMatrix() const { return XMLoadFloat4x4(&mRotationMatrix); }
+    XMMATRIX GetPositionMatrix() const { return XMLoadFloat4x4(&mPositionMatrix); }
     XMMATRIX GetWorldMatrix();
-    XMMATRIX GetWorldInverseMatrix()         { return XMLoadFloat4x4(&mWorldInverseMatrix); }
+    XMMATRIX GetWorldInverseMatrix()          { return XMLoadFloat4x4(&mWorldInverseMatrix); }
     XMMATRIX GetWorldInverseTransposeMatrix() { return XMLoadFloat4x4(&mWorldInverseTransposeMatrix); }
-    AxisAlignedBox* GetAxisAlignedBoundingBox() { return mMesh ? mMesh->mAxisAlignedBoundingBox : 0; }
-    Sphere*         GetBoundingSphere()         { return mMesh ? mMesh->mBoundingSphere : 0; }
+    AxisAlignedBox* GetAxisAlignedBoundingBox() const { return mMesh ? mMesh->BoundingBox : 0; }
+    Sphere*         GetBoundingSphere()         const { return mMesh ? mMesh->BoundingSphere : 0; }
 
     // Setters
     void SetScale    (XMFLOAT3 aScale)    { mUpdateScale    = true; mScale = aScale;       }
@@ -62,7 +72,7 @@ namespace Gine
     void SetParent   (Model* aParent)     { mParent = aParent; }
 
     // General factor for proportional scaling
-    float GetGeneralScale ()             { return mScale.x; };
+    float GetGeneralScale () const       { return mScale.x; };
     void  SetGeneralScale (float aScale) { mUpdateScale = true; mScale = XMFLOAT3(aScale,aScale,aScale); }
 
     // Special methods
@@ -107,8 +117,7 @@ namespace Gine
 
     // File loading utils
     bool LoadFile      (const char* aFileName);
-    bool LoadBones     (const aiScene* aScene, aiMesh* aMesh,
-                        vector<Vertex::Basic32>* aVertices, int aVertexOff);
+    bool LoadBones     (const aiScene* aScene, aiMesh* aMesh, vector<Vertex::Basic32>* aVertices, int aVertexOff);
     bool LoadAnimations(const aiScene* aScene);
   };
 }

@@ -1,13 +1,18 @@
 #include "Text.h"
-#include "Gine.h"
 #include "GineUtils.h"
 using namespace Gine;
 
 SpriteBatch Text::mSpriteBatch;
-bool Text::mIsSpriteBatchInitialized = false;
+bool Text::mSpriteBatchInitialized = false;
 
 bool Text::InitSpriteBatch()
 {
+  if(mSpriteBatchInitialized)
+  {
+    Info::Fatal("SpriteBatch already initialized");
+    return false;
+  }
+
   HRESULT result = mSpriteBatch.Initialize(Gine::gDevice);
   if(FAILED(result))
   {
@@ -15,7 +20,7 @@ bool Text::InitSpriteBatch()
     return false;
   }
 
-  mIsSpriteBatchInitialized = true;
+  mSpriteBatchInitialized = true;
   return true;
 }
 
@@ -23,9 +28,9 @@ Text::Text()
 {
 }
 
-Text::Text(string aText, XMFLOAT2 aPosition, eTextAlign aAlign, Font* aFont)
+Text::Text(const char* text, XMFLOAT2 position, TextAlign align, Font* font)
 {
-  Set(aText, aPosition, aAlign, aFont);
+  Set(text, position, align, font);
 }
 
 Text::~Text()
@@ -44,12 +49,12 @@ void Text::MoveBy(XMFLOAT2 aDistance, float aDuration, Easing::Enum aEasing)
   mTextYTween.Start(aEasing, aDuration, Position.y, Position.y + aDistance.y, true);
 }
 
-void Text::Set(string aText, XMFLOAT2 aPosition, eTextAlign aAlign, Font* aFont)
+void Text::Set(const char* text, XMFLOAT2 position, TextAlign align, Font* font)
 {  
-  Value = aText;
-  Position = aPosition;
-  Align = aAlign;
-  DisplayFont = aFont;
+  Value = text;
+  Position = position;
+  Align = align;
+  DisplayFont = font;
 }
 
 void Text::Tick(float dt)
@@ -67,8 +72,7 @@ void Text::Draw()
   if(Value.empty())
     return;
 
-  if(DisplayFont == 0) 
-  {
+  if(DisplayFont == 0) {
     Info::Fatal("Trying to draw a text with undefined font");
     return;
   }
@@ -76,25 +80,22 @@ void Text::Draw()
 	wstring wText = Utils::ToWString(&Value);
   POINT textPos = {(long)Position.x, (long)Position.y};
 
-  if(mCachedText != Value) 
-  {
+  if(mCachedText != Value) {
     mCachedTextWidth = DisplayFont->CalculateTextWidth(&wText);
     mCachedText = Value;
   }
 
-  if(TEXTALIGN_RIGHT == Align)
-  {
+  if(TEXTALIGN_RIGHT == Align) {
     textPos.x -= mCachedTextWidth;
   }
-  else if(TEXTALIGN_CENTER == Align)
-  {
+  else if(TEXTALIGN_CENTER == Align) {
     textPos.x -= mCachedTextWidth / 2;
   }
 
   //XMCOLOR newCol = color;
   //newCol.a = aAlpha * 255;
 
-  if(!mIsSpriteBatchInitialized)
+  if(!mSpriteBatchInitialized)
     InitSpriteBatch();
 
   mSpriteBatch.DrawString(gContext, DisplayFont->GetFontSheet(), wText, textPos, DisplayFont->Color);
