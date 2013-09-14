@@ -30,13 +30,13 @@ ID3D11ShaderResourceView* FontSheet::GetFontSheetSRV()
 	return mFontSheetSRV;
 }
 
-const CD3D11_RECT& FontSheet::GetCharRect(WCHAR c)
+const CD3D11_RECT& FontSheet::GetCharRect(WCHAR c) const
 {
 	assert(mInitialized);
 	return mCharRects[c - StartChar];
 }
 
-int FontSheet::GetSpaceWidth()
+int FontSheet::GetSpaceWidth() const
 {
 	assert(mInitialized);
 	return mSpaceWidth;

@@ -4,6 +4,10 @@
 
 namespace Gine
 {
+  /// <summary>
+  /// Singleton class for loading and displaying 2D images
+  /// </summary>
+
   class Sprite
   {
   public:
@@ -12,16 +16,16 @@ namespace Gine
     static bool Init();
     static void Destroy();
 
-    static void Draw(string aName, UINT aX, UINT aY);
-    static void Draw(string aName, UINT aX, UINT aY, float aScale);
-    static bool Load(string aName);
+    static void Draw(const char* name, UINT x, UINT y);
+    static void Draw(const char* name, UINT x, UINT y, float scale);
+    static bool Load(const char* name);
 
     ~Sprite();
 
-    XMFLOAT2 size;
-    XMFLOAT3 scale;
-    XMFLOAT3 rotate;
-    XMFLOAT3 translate;
+    XMFLOAT2 Size;
+    XMFLOAT3 Scale;
+    XMFLOAT3 Rotate;
+    XMFLOAT3 Translate;
 
   private:
     static map<string, Sprite> mSprites;

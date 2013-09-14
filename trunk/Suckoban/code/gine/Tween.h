@@ -23,9 +23,9 @@ namespace Gine
   public:
     Tween();
           
-    bool  IsOn()     { return mOn; };
-    float GetTime()  { return mTime; };
-    float GetValue() { return mCurrVal; };
+    bool  IsOn()     const { return mOn; };
+    float GetTime()  const { return mTime; };
+    float GetValue() const { return mCurrVal; };
     bool  JustFinished();
     
     void Start(Easing::Enum aType, float aDuration, float aBeginVal,

@@ -10,45 +10,62 @@ using namespace std;
 using namespace XNA;
 using namespace Gine;
 
-class Mesh
-{
-public:
-	Mesh();
-  void Init();
+namespace Gine {
 
-	~Mesh();
+  /// <summary>
+  /// Unique model's mesh with default transformation
+  /// </summary>
 
-  void SetScale(float aScale);
-  void Transform();
+  class Mesh
+  {
+  public:
+	  Mesh();
+	  ~Mesh();
 
-	ID3D11Buffer* mVertexBuffer;
-  int mVertices;
-  ID3D11Buffer* mIndexBuffer;
-  int mIndices;
+    void Init();
+    void Tick(float dt);
 
-  XMFLOAT3 mScale;
-  XMFLOAT3 mRotate;
-  XMFLOAT3 mTranslate;
-  XMFLOAT4X4 mWorld;
+    void SetScale(const float scale) { Scale = XMFLOAT3(scale, scale, scale); }
+    void Transform();
 
-  int mSubsets;
-  vector<int> mSubsetIndexStart;
+    // Vertices and indices data
+	  ID3D11Buffer* VertexBuffer;
+    int Vertices;
+    ID3D11Buffer* IndexBuffer;
+    int Indices;
 
-  AxisAlignedBox* mAxisAlignedBoundingBox;
-  Sphere* mBoundingSphere;
+    // Mesh orientation data
+    XMFLOAT3 Scale;
+    XMFLOAT3 Rotate;
+    XMFLOAT3 Translate;
+    XMFLOAT4X4 World;
 
-  // Animation
-  vector<Bone> mBones;
-  map<string, Animation> mAnimations;
-  Animation* mCurrentAnimation;
+    // Subsets for materials
+    int Subsets;
+    vector<int> SubsetIndexStart;
 
-  void StartAnimation(string aName);
-  void StopAllAnimations();
-  UINT GetCurrentAnimationPose(XMFLOAT4X4* aOffsets);
+    // Bounding geometry for collisions
+    AxisAlignedBox* BoundingBox;
+    Sphere* BoundingSphere;
 
-  int GetNumBone(string aName);
-  Bone* GetBone(string aName);
+    // Animation structures
+    vector<Bone> Bones;
+    map<string, Animation> Animations;
+    Animation* CurrentAnimation;
 
-  void Tick(float dt);
-};
+    void StartAnimation(const string* name);
+    void StopAllAnimations();
 
+    /// <summary>
+    /// Stores current animaton pose in a matrix passed as a offsets param
+    /// </summary>
+    /// <param name="offsets">  [in,out] A matrix to store bones offsets data </param>
+    /// <returns> A number of bones in current animation </returns>
+
+    UINT GetCurrentAnimationPose(XMFLOAT4X4& offsets) const;
+
+    int GetNumBone(const string* name) const;
+    Bone* GetBone(const string* name);
+  };
+
+}

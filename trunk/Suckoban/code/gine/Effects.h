@@ -10,6 +10,7 @@
 
 #include "d3dUtil.h"
 #include "Material.h"
+using namespace Gine;
 
 #pragma region Effect
 class Effect

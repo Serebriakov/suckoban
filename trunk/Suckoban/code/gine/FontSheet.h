@@ -52,13 +52,13 @@ public:
 	///
 	/// Gets the rectangle on the sprite sheet that bounds the given character.
 	///
-	const CD3D11_RECT& GetCharRect(WCHAR c);
+	const CD3D11_RECT& GetCharRect(WCHAR c) const;
 
 	///
 	/// Gets the width of the "space" character.  This tells the SpriteBatch
 	/// how much space to skip when rendering space characters.
 	///
-    int GetSpaceWidth();
+    int GetSpaceWidth() const;
 
 	///
 	/// Returns the character height for the font.  This should be used for

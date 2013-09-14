@@ -2,7 +2,7 @@
 #include "GineUtils.h"
 using namespace Gine;
 
-int Font::CalculateTextWidth(const wstring* text)
+int Font::CalculateTextWidth(const wstring* text) const
 {
   if(!mIsFontSheetInitialized) 
   {
@@ -34,7 +34,7 @@ Font::Font()
   Color = XMCOLOR(1.0f, 1.0f, 1.0f, 0.8f);
 }
 
-Font::Font(string name, float size, XMCOLOR color, FontStyle style)
+Font::Font(const char* name, float size, XMCOLOR color, FontStyle style)
 {
   mIsFontSheetInitialized = false;
   Load(name, size, color, style);
@@ -44,7 +44,7 @@ Font::~Font()
 {
 }
 
-bool Font::Load(string name, float size, XMCOLOR color, FontStyle style)
+bool Font::Load(const char* name, float size, XMCOLOR color, FontStyle style)
 {  
   if(mIsFontSheetInitialized)
   {
@@ -52,7 +52,7 @@ bool Font::Load(string name, float size, XMCOLOR color, FontStyle style)
     return false;
   }
 
-  HRESULT result = mFontSheet.Initialize(gDevice, Utils::ToWString(&name), size, (FontSheet::FontStyle) style, true);
+  HRESULT result = mFontSheet.Initialize(gDevice, Utils::ToWString(&string(name)), size, (FontSheet::FontStyle) style, true);
   if(FAILED(result))
   {
     Info::Fatal("FontSheet initialization failed with error code 0x%08lx", result);
