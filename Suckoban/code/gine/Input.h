@@ -17,7 +17,9 @@ namespace Gine
   public:
     static bool Init();
     static void Tick(float dt);
-
+    
+    static bool Pressed (int aKey);
+    static bool Down    (int aKey);
     static bool Released(int aKey);
     static bool PressedDir(Dir::Enum& aDir);
 

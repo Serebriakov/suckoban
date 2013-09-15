@@ -1,14 +1,18 @@
 #pragma once
 
+/// <summary>
+/// A virtual state in the game.
+/// </summary>
+
 class State
 {
 public:
   State() { };
-  virtual ~State() { };
+  virtual ~State() = 0;
   
-  virtual bool Init() = 0;
-  virtual void Tick(float dt) = 0;
-  virtual void Draw() = 0;
+  virtual bool Init();
+  virtual void Tick(float dt) {};
+  virtual void Draw() {};
 
   bool IsOn()
   {

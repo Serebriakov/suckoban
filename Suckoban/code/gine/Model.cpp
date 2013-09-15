@@ -11,14 +11,14 @@
 using namespace std;
 using namespace Gine;
 
+map<string, Model> Model::All;
+ID3D11Buffer*      Model::mInstancedBuffer = 0;
+
 const int MAX_INSTANCES = 200;
 const BYTE MAX_BONES = 96;
 const char* MODELS_PATH = "data/gfx/models/";
 const char* FILE_FORMATS[2] = {".obj", ".x"};
 const int N_FILE_FORMATS = sizeof(FILE_FORMATS) / sizeof(const char*);
-
-map<string, Model> Model::All;
-ID3D11Buffer*      Model::mInstancedBuffer = 0;
 
 // For SSAO mapping
 XMMATRIX toTexSpace(
@@ -177,7 +177,7 @@ void Model::DrawSingle(vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTec
 			  Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
 			  Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
         if(model.mMaterials.size() > 1)
-          Effects::SsaoNormalDepthFX->SetDiffuseMap(model.mMaterials[1]->texture->diffuse);
+          Effects::SsaoNormalDepthFX->SetDiffuseMap(model.mMaterials[1]->texture->Diffuse);
       }
       else
       {
@@ -200,9 +200,9 @@ void Model::DrawSingle(vector<Model*>* aRenderList, ID3DX11EffectTechnique* aTec
         if(!isSsaoTech)
         {
           Effects::BasicFX->SetMaterialColors(model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
-          Effects::BasicFX->SetDiffuseMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
-          Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
-          Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
+          Effects::BasicFX->SetDiffuseMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->Diffuse);
+          Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->Bump);
+          Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->Specular);
 		      Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
         }
 
@@ -276,9 +276,9 @@ void Model::DrawInstanced(vector<Model*>* aRenderList, ID3DX11EffectTechnique* a
       int indexDrawAmount = model.mMesh->SubsetIndexStart[i+1] - model.mMesh->SubsetIndexStart[i];
 
       Effects::BasicFX->SetMaterialColors(model.mMaterials[model.mSubsetMaterial[i]]->materialColors);
-      Effects::BasicFX->SetDiffuseMap( model.mMaterials[model.mSubsetMaterial[i]]->texture->diffuse);
-      Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->bump);
-      Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->specular);
+      Effects::BasicFX->SetDiffuseMap( model.mMaterials[model.mSubsetMaterial[i]]->texture->Diffuse);
+      Effects::BasicFX->SetBumpMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->Bump);
+      Effects::BasicFX->SetSpecularMap(model.mMaterials[model.mSubsetMaterial[i]]->texture->Specular);
 		  Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
 
       pass->Apply(0, Gine::gContext);

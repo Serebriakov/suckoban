@@ -20,6 +20,9 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{81b46638-782f-4b58-b364-e4126c44c034}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\States">
+      <UniqueIdentifier>{25b002d4-eb97-4190-b574-5365c74c5446}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\gine\Animation.h">
@@ -64,28 +67,10 @@
     <ClInclude Include="code\gine\Tween.h">
       <Filter>Gine</Filter>
     </ClInclude>
-    <ClInclude Include="code\gine\Vertex.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\gine\xnacollision.h">
-      <Filter>Gine</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Gameplay.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="code\State.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="code\Level.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="code\LevelStart.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="code\Moveable.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="code\LevelPause.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="code\gine\d3dUtil.h">
@@ -123,6 +108,24 @@
     </ClInclude>
     <ClInclude Include="code\gine\resource.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\Vertex.h">
+      <Filter>Gine\ToRefac</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\xnacollision.h">
+      <Filter>Gine\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="code\State.h">
+      <Filter>Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="code\LevelStart.h">
+      <Filter>Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="code\LevelPause.h">
+      <Filter>Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Gameplay.h">
+      <Filter>Source\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -171,15 +174,6 @@
     <ClCompile Include="code\gine\Tween.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
-    <ClCompile Include="code\gine\Vertex.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\gine\xnacollision.cpp">
-      <Filter>Gine</Filter>
-    </ClCompile>
-    <ClCompile Include="code\State.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="code\gine\d3dUtil.cpp">
       <Filter>Gine\ToRefac</Filter>
     </ClCompile>
@@ -209,6 +203,30 @@
     </ClCompile>
     <ClCompile Include="code\gine\RenderStates.cpp">
       <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\Vertex.cpp">
+      <Filter>Gine\ToRefac</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\xnacollision.cpp">
+      <Filter>Gine\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Level.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Moveable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="code\State.cpp">
+      <Filter>Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="code\LevelStart.cpp">
+      <Filter>Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="code\LevelPause.cpp">
+      <Filter>Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Gameplay.cpp">
+      <Filter>Source\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

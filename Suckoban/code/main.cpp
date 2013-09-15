@@ -1,6 +1,16 @@
-#include "gine/Gine.h"
+#include "GineUtils.h"
+#include "Input.h"
 #include "Gameplay.h"
-using Gine::Info;
+
+// Main game properties
+const char* GAME_TITLE = "Suckoban";
+const bool ENABLE_4XMSAA = true;
+const bool ENABLE_SSAO = false;
+
+/// <summary>
+/// Main Game class
+/// Used to init DX11 and Gine
+/// </summary>
 
 class Game : public D3DApp
 {
@@ -8,7 +18,7 @@ public:
   Game(HINSTANCE hInstance);
   ~Game();
 
-  State* state;
+  State* EntryState;
 
   bool Init();
   void OnResize();
@@ -16,58 +26,72 @@ public:
   void DrawScene();
 };
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine,
-                   int showCmd)
+/// <summary>
+/// Option's windows before starting the game
+/// </summary>
+
+void ShowPregameOptions(Game* game)
+{
+#if defined(DEBUG) | defined(_DEBUG)
+
+  Info::ShowConsole();
+
+#else
+
+  int result = MessageBox(0, L"Start in fullscreen mode?", Utils::ToWString(GAME_TITLE).c_str(),
+                          MB_YESNO | MB_ICONQUESTION);
+  if(IDYES == result)
+    game->SetFullscreen(true);
+
+#endif
+}
+
+/// <summary>
+/// Application entry point
+/// </summary>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
   srand(time(0));
-  Game theApp(hInstance);
+  Game game(hInstance);
 
-//  #if defined(DEBUG) | defined(_DEBUG)
-//#else
-//  int result = MessageBox(0, L"Start in fullscreen mode?",
-//                          L"Are you ready?", 
-//                          MB_YESNO | MB_ICONQUESTION);
-//  if(IDYES == result)
-//    theApp.SetFullscreen(true);
-//#endif
-//
-//#if defined(DEBUG) | defined(_DEBUG)
-  Info::ShowConsole();
-//#endif
+  ShowPregameOptions(&game);
 
-  if(!theApp.Init())
-  {
+  if(!game.Init()) {
     Info::Fatal("Application init failed");
     return 0;
   }
 
   Info::Log("Run...\n");
-  return theApp.Run();
+  return game.Run();
 }
 
 Game::Game(HINSTANCE hInstance) :
   D3DApp(hInstance),
-  state(0)
+  EntryState(0)
 {
-  mMainWndCaption = L"Suckoban";
-  mEnable4xMsaa = true;
-  mEnableSSAO = false;
+  mMainWndCaption = Utils::ToWString(GAME_TITLE);
+  mEnable4xMsaa = ENABLE_4XMSAA;
+  mEnableSSAO = ENABLE_SSAO;
 }
 
 Game::~Game()
 {
-  delete state;
+  delete EntryState;
   md3dImmediateContext->ClearState();
   Gine::Destroy();
 }
 
 bool Game::Init()
 {
-  if(!D3DApp::Init()) return false;
-  if(!Gine::Init()) return false;
+  if(!D3DApp::Init())
+    return false;
+  if(!Gine::Init())
+    return false;
 
-  state = new Gameplay();
-  if(!state->Init()) return false;
+  EntryState = new Gameplay();
+  if(!EntryState->Init())
+    return false;
 
   return true;
 }
@@ -79,18 +103,18 @@ void Game::OnResize()
 
 void Game::UpdateScene(float dt)
 {
-  if(GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+  if(Input::Pressed(VK_F12))
     PostQuitMessage(0);
 
-  Gine::Input::Tick(dt);
+  Input::Tick(dt);
 
-  state->Tick(dt);
+  EntryState->Tick(dt);
 
   gCamera->UpdateViewMatrix();
 }
 
 void Game::DrawScene()
 {  
-  state->Draw();
+  EntryState->Draw();
   HR(mSwapChain->Present(0, 0));
 }

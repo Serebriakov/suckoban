@@ -101,6 +101,7 @@
     <ClInclude Include="code\State.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Gameplay.cpp" />
     <ClCompile Include="code\gine\Animation.cpp" />
     <ClCompile Include="code\gine\Camera.cpp" />
     <ClCompile Include="code\gine\d3dApp.cpp" />
@@ -127,7 +128,11 @@
     <ClCompile Include="code\gine\Tween.cpp" />
     <ClCompile Include="code\gine\Vertex.cpp" />
     <ClCompile Include="code\gine\xnacollision.cpp" />
+    <ClCompile Include="code\Level.cpp" />
+    <ClCompile Include="code\LevelPause.cpp" />
+    <ClCompile Include="code\LevelStart.cpp" />
     <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\Moveable.cpp" />
     <ClCompile Include="code\State.cpp" />
   </ItemGroup>
   <ItemGroup>

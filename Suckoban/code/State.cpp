@@ -1,5 +1,9 @@
 #include "State.h"
 
+State::~State()
+{
+}
+
 bool State::Init()
 {
   mOn = false;

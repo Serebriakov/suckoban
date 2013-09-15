@@ -4,22 +4,32 @@
 #include <map>
 using namespace std;
 
-class Texture
+namespace Gine 
 {
-public:
-  static map<string, Texture*> All;
-  static bool Load(const char* aName);
-  static Texture* Get(const char* aName);
+  /// <summary>
+  /// Model's textures.
+  /// Includes diffuse, bump and specular map.
+  /// Singleton textures container.
+  /// </summary>
 
-  ID3D11ShaderResourceView* diffuse;
-  ID3D11ShaderResourceView* bump;
-  ID3D11ShaderResourceView* specular;
+  class Texture
+  {
+  public:
+    static map<string, Texture*> All;
+    static bool     Load(const char* name);
+    static Texture* Get (const char* name);
 
-  ~Texture();
+    ID3D11ShaderResourceView* Diffuse;
+    ID3D11ShaderResourceView* Bump;
+    ID3D11ShaderResourceView* Specular;
 
-private:
-  string mName;
+    ~Texture();
 
-  Texture();
-};
+  private:
+    string mName;
+
+    Texture();
+  };
+
+}
 
