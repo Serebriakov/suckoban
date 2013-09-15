@@ -25,8 +25,8 @@ namespace Gine
   };
 
   /// <summary>
-  /// A model's material
-  /// Singleton materials container
+  /// Model's material.
+  /// Singleton materials container.
   /// </summary>
 
   class Material

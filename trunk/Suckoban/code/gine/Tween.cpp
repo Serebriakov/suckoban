@@ -5,7 +5,7 @@ using namespace Gine;
 Tween::Tween() :
   mOn(false),
   mJustFinished(false),
-  mType(Easing::NONE),
+  mEasing(NONE),
   mTime(0.0f),
   mDuration(0.0f),
   mBeginVal(0.0f),
@@ -17,8 +17,7 @@ Tween::Tween() :
 
 bool Tween::JustFinished()
 {
-  if(mJustFinished)
-  {
+  if(mJustFinished) {
     mJustFinished = false;
     return true;
   }
@@ -26,100 +25,93 @@ bool Tween::JustFinished()
   return false;
 }
 
-void Tween::Start(Easing::Enum aType, float aDuration, float aBeginVal,
-                  float aEndVal, bool aStarted)
+void Tween::Start(Easing easing, float duration, float beginVal, float endVal)
 {
-  mOn = aStarted;
+  mOn = true;
   mJustFinished = false;
-  mType = aType;
+  mEasing = easing;
   mTime = 0.0f;
-  mDuration = aDuration;
-  mBeginVal = aBeginVal;
-  mChangeVal = aEndVal - aBeginVal;
-  mEndVal = aEndVal;
-  mCurrVal = mBeginVal;
-}
-
-void Tween::Stop()
-{
-  mOn = false;
+  mDuration = duration;
+  mBeginVal = beginVal;
+  mChangeVal = endVal - beginVal;
+  mEndVal = endVal;
+  mCurrVal = beginVal;
 }
 
 void Tween::Tick(float dt)
 {
-  if(mOn)
+  if(!mOn) 
+    return;
+
+  mTime += dt;
+    
+  if(mTime > mDuration)
   {
-    mTime += dt;
-    
-    if(mTime > mDuration)
-    {
-      mCurrVal = mEndVal;
-      mTime = mDuration;
-      mOn = false;
-      mJustFinished = true;
-    }
-    
-    mCurrVal = Ease(mType, mTime, mDuration, mBeginVal, mChangeVal);
+    mCurrVal = mEndVal;
+    mTime = mDuration;
+    mOn = false;
+    mJustFinished = true;
   }
+  else
+    mCurrVal = Ease(mEasing, mTime, mDuration, mBeginVal, mChangeVal);
 }
 
-float Tween::Ease(Easing::Enum aType, float aTime, float aDuration, 
-                  float aBegin, float aChange)
+float Tween::Ease(Easing easing, float time, float duration, float begin, float change)
 {
-	float& t = aTime;
-	float& b = aBegin;
-	float& c = aChange;
-	float& d = aDuration;
+	float& t = time;
+	float& b = begin;
+	float& c = change;
+	float& d = duration;
 	
 	float ts;
 	float tc;
 
-	switch(aType)
+  switch(easing)
 	{
-	case Easing::NONE:
+	case NONE:
 		t /= d;
 		return b + c*t;
 		
-	case Easing::INX:
+	case INX:
 		ts = (t/=d)*t;
 		return b + c*(ts*ts);
 		
-	case Easing::OUTX:
+	case OUTX:
 		ts = (t/=d)*t;
 		tc = ts*t;
 		return b+c*(-1*ts*ts + 4*tc + -6*ts + 4*t);
 		
-	case Easing::INOUT:
+	case INOUT:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(6*tc*ts + -15*ts*ts + 10*tc);
 		
-	case Easing::OUTIN:
+	case OUTIN:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(6*tc + -9*ts + 4*t);
 	
-	case Easing::BACKIN:
+	case BACKIN:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(2*ts*ts + 2*tc + -3*ts);
 	
-	case Easing::OUTBACK:
+	case OUTBACK:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(-2*ts*ts + 10*tc + -15*ts + 8*t);
 	
-	case Easing::OUTELASTIC:
+	case OUTELASTIC:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(56*tc*ts + -175*ts*ts + 200*tc + -100*ts + 20*t);
 	
-	case Easing::INELASTIC:
+	case INELASTIC:
 		ts=(t/=d)*t;
 		tc=ts*t;
 		return b+c*(56*tc*ts + -105*ts*ts + 60*tc + -10*ts);
 
-  case Easing::OUTBOUNCE:
+  case OUTBOUNCE:
 	  if ((t/=d) < (1/2.75)) {
 		  return c*(7.5625*t*t) + b;
 	  } else if (t < (2/2.75)) {
@@ -130,10 +122,10 @@ float Tween::Ease(Easing::Enum aType, float aTime, float aDuration,
 		  return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
 	  }
 
-  case Easing::INBOUNCE:
+  case INBOUNCE:
     return c - Ease(Easing::OUTBOUNCE, d-t, d, 0, c) + b;
 
-  case Easing::INOUTBOUNCE:
+  case INOUTBOUNCE:
 	  if (t < d/2) return Ease(Easing::INBOUNCE, t*2, d, 0, c) * 0.5f + b;
 	  return Ease(Easing::OUTBOUNCE, t*2-d, d, 0, c) * 0.5f + c*0.5f + b;
     

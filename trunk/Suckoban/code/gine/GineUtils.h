@@ -75,7 +75,8 @@ namespace Gine
     void Tween(float& aX, float aTarget, float aSpeed, float aDt);
 
     // Text
-    wstring ToWString(const string* s);  
+    wstring ToWString(const string* s); 
+    wstring ToWString(const char* s); 
     string ToString(const int i);
     string Format(const char* text, ...);
     string VFormat(const char* text, va_list ap);

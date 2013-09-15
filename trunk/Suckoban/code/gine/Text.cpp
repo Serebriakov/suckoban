@@ -37,16 +37,16 @@ Text::~Text()
 {
 }
 
-void Text::MoveTo(XMFLOAT2 aDestination, float aDuration, Easing::Enum aEasing)
+void Text::MoveTo(XMFLOAT2 aDestination, float aDuration, Easing aEasing)
 {
-  mTextXTween.Start(aEasing, aDuration, Position.x, aDestination.x, true);
-  mTextYTween.Start(aEasing, aDuration, Position.y, aDestination.y, true);
+  mTextXTween.Start(aEasing, aDuration, Position.x, aDestination.x);
+  mTextYTween.Start(aEasing, aDuration, Position.y, aDestination.y);
 }
 
-void Text::MoveBy(XMFLOAT2 aDistance, float aDuration, Easing::Enum aEasing)
+void Text::MoveBy(XMFLOAT2 aDistance, float aDuration, Easing aEasing)
 {
-  mTextXTween.Start(aEasing, aDuration, Position.x, Position.x + aDistance.x, true);
-  mTextYTween.Start(aEasing, aDuration, Position.y, Position.y + aDistance.y, true);
+  mTextXTween.Start(aEasing, aDuration, Position.x, Position.x + aDistance.x);
+  mTextYTween.Start(aEasing, aDuration, Position.y, Position.y + aDistance.y);
 }
 
 void Text::Set(const char* text, XMFLOAT2 position, TextAlign align, Font* font)
@@ -91,9 +91,6 @@ void Text::Draw()
   else if(TEXTALIGN_CENTER == Align) {
     textPos.x -= mCachedTextWidth / 2;
   }
-
-  //XMCOLOR newCol = color;
-  //newCol.a = aAlpha * 255;
 
   if(!mSpriteBatchInitialized)
     InitSpriteBatch();

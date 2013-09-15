@@ -117,6 +117,12 @@ wstring Utils::ToWString(const string* s)
   return wstring(s->begin(), s->end());
 }
 
+wstring Utils::ToWString(const char* s)
+{
+  string str = s;
+  return wstring(str.begin(), str.end());
+}
+
 string Utils::ToString(const int i)
 {
   return to_string((long double)i);

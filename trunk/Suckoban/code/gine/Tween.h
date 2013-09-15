@@ -2,7 +2,7 @@
 
 namespace Gine
 {
-  namespace Easing { enum Enum
+  enum Easing
   {
     NONE = 0,
     INX,
@@ -16,28 +16,31 @@ namespace Gine
     INBOUNCE,
     OUTBOUNCE,
     INOUTBOUNCE
-  };}
+  };
+
+  /// <summary>
+  /// Controls smooth transitions between two float values.
+  /// </summary>
 
   class Tween
   {
   public:
     Tween();
           
-    bool  IsOn()     const { return mOn; };
-    float GetTime()  const { return mTime; };
-    float GetValue() const { return mCurrVal; };
+    bool  IsOn()     const { return mOn; }
+    float GetTime()  const { return mTime; }
+    float GetValue() const { return mCurrVal; }
     bool  JustFinished();
     
-    void Start(Easing::Enum aType, float aDuration, float aBeginVal,
-               float aEndVal, bool aStarted = false);
-    void Stop();
+    void Start(Easing easing, float duration, float beginVal, float endVal);
+    void Stop() { mOn = false; }
     void Tick(float dt);  
     
   private:
     bool mOn;
     bool mJustFinished;
     
-    Easing::Enum mType;
+    Easing mEasing;
     float mTime;
     float mDuration;
     
@@ -46,7 +49,6 @@ namespace Gine
     float mEndVal;
     float mCurrVal;
     
-    float Ease(Easing::Enum aType, float aTime, float aDuration, 
-               float aBegin, float aChange);
+    float Ease(Easing easing, float time, float duration, float begin, float change);
   };
 }

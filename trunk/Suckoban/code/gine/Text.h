@@ -30,8 +30,8 @@ namespace Gine
     TextAlign   Align;
     Font*       DisplayFont;
 
-    void MoveTo(XMFLOAT2 aDestination, float aDuration, Easing::Enum aEasing);
-    void MoveBy(XMFLOAT2 aDistance,    float aDuration, Easing::Enum aEasing);
+    void MoveTo(XMFLOAT2 aDestination, float aDuration, Easing aEasing);
+    void MoveBy(XMFLOAT2 aDistance,    float aDuration, Easing aEasing);
     bool IsMoving() const { return mTextXTween.IsOn() || mTextYTween.IsOn(); }
 
     void Set(const char* text, XMFLOAT2 position, TextAlign align, Font* font);

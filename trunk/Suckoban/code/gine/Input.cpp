@@ -26,6 +26,16 @@ void Input::Tick(float dt)
   RefreshKeys(mThisFrame);
 }
 
+bool Input::Pressed(int aKey)
+{
+  return mThisFrame[aKey] && !mLastFrame[aKey];
+}
+
+bool Input::Down(int aKey)
+{
+  return mThisFrame[aKey] && mLastFrame[aKey];
+}
+
 bool Input::Released(int aKey)
 {
   return !mThisFrame[aKey] && mLastFrame[aKey];

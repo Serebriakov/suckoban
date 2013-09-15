@@ -1,11 +1,13 @@
 #include "Texture.h"
 #include "Info.h"
 #include "Gine.h"
-using Gine::Info;
+using namespace Gine;
 
 map<string, Texture*> Texture::All;
 
-bool Texture::Load(const char* aName)
+const char* TEXTURES_PATH = "data/gfx/models/";
+
+bool Texture::Load(const char* name)
 {
   Texture* texture = new Texture();
   wchar_t fileName[1024];
@@ -13,77 +15,66 @@ bool Texture::Load(const char* aName)
   HRESULT result;
 
   // Diffuse
-  path = "data/gfx/models/";
-  path += aName;
-  //path += ".png";
+  path = TEXTURES_PATH;
+  path += name;
   mbstowcs(fileName, path.c_str(), 1024);
   
-  result = D3DX11CreateShaderResourceViewFromFile(Gine::gDevice, fileName, 0, 0, 
-                                                  &texture->diffuse, 0);
-  if(FAILED(result))
-  {
-    Info::Fatal("Couldn't load texture: %s", path.c_str());
+  result = D3DX11CreateShaderResourceViewFromFile(Gine::gDevice, fileName, 0, 0, &texture->Diffuse, 0);
+  if(FAILED(result)) {
+    Info::Fatal("Couldn't load diffuse texture: %s", path.c_str());
     return false;
   }
 
-  //// Bump
-  //path = "GFX/";
-  //path += aName;
-  //path += "_bump.png";
+  // TODO: Need to standarize loading *.obj and *.x files from Blender to load bump and spec maps like a boss
+  // Bump
+  //path = TEXTURES_PATH;
+  //path += "_bump";
   //mbstowcs(fileName, path.c_str(), 1024);
   //
-  //result = D3DX11CreateShaderResourceViewFromFile(mDevice, fileName, 0, 0,
-  //                                                &texture->bump, 0);
-  //if(FAILED(result))
-  //{
-  //  Info::Fatal("Couldn't load texture: %s", path.c_str());
-  //  //return false;
+  //result = D3DX11CreateShaderResourceViewFromFile(Gine::gDevice, fileName, 0, 0, &texture->Bump, 0);
+  //if(FAILED(result)) {
+  //  Info::Fatal("Couldn't load bump texture: %s", path.c_str());
+  //  return false;
   //}
 
   //// Specular
-  //path = "GFX/";
-  //path += aName;
-  //path += "_spec.png";
+  //path = TEXTURES_PATH;
+  //path += name;
+  //path += "_spec";
   //mbstowcs(fileName, path.c_str(), 1024);
   //
-  //result = D3DX11CreateShaderResourceViewFromFile(mDevice, fileName, 0, 0,
-  //                                                &texture->specular, 0);
-  //if(FAILED(result))
-  //{
+  //result = D3DX11CreateShaderResourceViewFromFile(Gine::gDevice, fileName, 0, 0, &texture->Specular, 0);
+  //if(FAILED(result)) {
   //  Info::Fatal("Couldn't load texture: %s", path.c_str());
-  //  //return false;
+  //  return false;
   //}
 
-  texture->mName = aName;
-  All[aName] = texture;
+  texture->mName = name;
+  All[name] = texture;
   
   return true;
 }
 
-Texture* Texture::Get(const char* aName)
+Texture* Texture::Get(const char* name)
 {
-  if(!All.count(aName))
-  {
-    Load(aName);
+  if(!All.count(name)) {
+    Load(name);
   }
  
-  return All[aName];
+  return All[name];
 }
 
 Texture::Texture()
 {
-  diffuse = 0;
-  bump = 0;
-  specular = 0;
+  Diffuse = 0;
+  Bump = 0;
+  Specular = 0;
   mName = "Texture";
 }
 
 Texture::~Texture()
 {
-  if(diffuse)
-    ReleaseCOM(diffuse);
-  if(bump)
-    ReleaseCOM(bump);
-  if(specular)
-    ReleaseCOM(specular);
+  ReleaseCOM(Diffuse);
+  ReleaseCOM(Bump);
+  ReleaseCOM(Specular);
 }
