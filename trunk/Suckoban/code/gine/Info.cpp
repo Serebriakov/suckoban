@@ -31,7 +31,7 @@ void Info::Log(const char* aText, ...)
   char buff[1024];
   va_list args;
   va_start(args, aText);
-  vsprintf(buff, aText, args);
+  vsprintf_s(buff, aText, args);
   va_end(args);
 
   printf("%s\n", buff);
@@ -42,7 +42,7 @@ void Info::Fatal(const char* aText, ...)
   char buff[1024];
   va_list args;
   va_start(args, aText);
-  vsprintf(buff, aText, args);
+  vsprintf_s(buff, aText, args);
   va_end(args);
 
   Log(buff);

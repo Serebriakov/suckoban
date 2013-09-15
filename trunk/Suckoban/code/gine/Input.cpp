@@ -7,7 +7,7 @@ bool Input::mThisFrame[N_VIRTUAL_KEYS];
 void Input::RefreshKeys(bool* aFrame)
 {
   for(int i=0; i<N_VIRTUAL_KEYS; i++)
-    aFrame[i] = GetAsyncKeyState(i) & 0x8000;
+    aFrame[i] = (bool)(GetAsyncKeyState(i) & 0x8000);
 }
 
 bool Input::Init()
