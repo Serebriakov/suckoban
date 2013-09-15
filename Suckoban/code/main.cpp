@@ -6,6 +6,7 @@
 const char* GAME_TITLE = "Suckoban";
 const bool ENABLE_4XMSAA = true;
 const bool ENABLE_SSAO = false;
+const int PANIC_CLOSE_KEY = VK_F4;
 
 /// <summary>
 /// Main Game class
@@ -52,7 +53,7 @@ void ShowPregameOptions(Game* game)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
-  srand(time(0));
+  srand((UINT)time(0));
   Game game(hInstance);
 
   ShowPregameOptions(&game);
@@ -103,7 +104,7 @@ void Game::OnResize()
 
 void Game::UpdateScene(float dt)
 {
-  if(Input::Pressed(VK_F12))
+  if(Input::Pressed(PANIC_CLOSE_KEY))
     PostQuitMessage(0);
 
   Input::Tick(dt);

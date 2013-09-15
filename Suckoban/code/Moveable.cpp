@@ -6,7 +6,7 @@ const float ROTATE_DURR = 0.1f;
 Moveable::Moveable(Node position, const char* modelName)
 {
   mModel = Model::Get(modelName);
-  mModel.SetPosition(XMFLOAT3(position.x, 0.0f, position.y));
+  mModel.SetPosition(XMFLOAT3((FLOAT)position.x, 0.0f, (FLOAT)position.y));
   mPos = position;
   mDir = Dir::UP;
 }

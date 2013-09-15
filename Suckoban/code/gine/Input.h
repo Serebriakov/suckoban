@@ -1,5 +1,6 @@
 #pragma once
-#include "GineUtils.h";
+
+#include "GineUtils.h"
 
 /// <summary> Number of default Windows virtual keys </summary>
 const int N_VIRTUAL_KEYS = 0xFE;

@@ -4,14 +4,14 @@
 
 void LevelPause::Enter()
 {
-  mPauseText.Set("PAUSE", XMFLOAT2(-200, gScreenH / 2 - 100), TEXTALIGN_CENTER, &mPauseFont);
-  mPauseText.MoveTo(XMFLOAT2(gScreenW / 2, gScreenH / 2 - 100), 0.3f, OUTX);
+  mPauseText.Set("PAUSE", XMFLOAT2(-200.0f, gScreenH / 2.0f - 100), TEXTALIGN_CENTER, &mPauseFont);
+  mPauseText.MoveTo(XMFLOAT2(gScreenW / 2.0f, gScreenH / 2.0f - 100.0f), 0.3f, OUTX);
   mEntering = true;
 }
 
 void LevelPause::Exit()
 {
-  mPauseText.MoveTo(XMFLOAT2(gScreenW, gScreenH / 2 - 100), 0.3f, INX);
+  mPauseText.MoveTo(XMFLOAT2((FLOAT)gScreenW, gScreenH / 2.0f - 100), 0.3f, INX);
   mExiting = true;
 }
 

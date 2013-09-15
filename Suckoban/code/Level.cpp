@@ -73,7 +73,7 @@ bool Level::IsSolved() const
       return false;
 
     Node boxPos = mBoxes[i].GetPosition();
-    Node mapPos(-(boxPos.y - mHeight/2), boxPos.x + mWidth/2);
+    Node mapPos(-(boxPos.y - (int)(mHeight / 2)), boxPos.x + mWidth / 2);
     Tile tile = mMap[mapPos.x][mapPos.y];
     if(GOAL != tile && PLAYER_GOAL != tile && BOX_GOAL != tile)
       return false;
@@ -96,40 +96,40 @@ void Level::Reset()
   for(UINT i=0; i<mMap.size(); i++)
     for(UINT j=0; j<mMap[i].size(); j++)
     {
-      Node realPos(j - mWidth/2, -i + mHeight/2);
+      Node realPos(j - mWidth / 2, mHeight / 2 - i);
       int nObjects = mObjects.size();
       switch(mMap[i][j])
       {
-      case Tile::WALL:
+      case WALL:
         mObjects.push_back(Model::Get("wall"));
         mObjects.push_back(Model::Get("floor"));
         break;
-      case Tile::PLAYER_GOAL:
+      case PLAYER_GOAL:
         mPlayer = Moveable(realPos, "player");
         mObjects.push_back(Model::Get("goal"));
         break;
-      case Tile::PLAYER:
+      case PLAYER:
         mPlayer = Moveable(realPos, "player");
         mObjects.push_back(Model::Get("floor"));
         break; 
-      case Tile::BOX_GOAL:
+      case BOX_GOAL:
         mBoxes.push_back(Moveable(realPos, "box"));
         mObjects.push_back(Model::Get("goal"));
         break;
-      case Tile::BOX:
+      case BOX:
         mBoxes.push_back(Moveable(realPos, "box"));
         mObjects.push_back(Model::Get("floor"));
         break; 
-      case Tile::GOAL:
+      case GOAL:
         mObjects.push_back(Model::Get("goal"));
         break;
-      case Tile::FLOOR:
+      case FLOOR:
         mObjects.push_back(Model::Get("floor"));
         break;
       }
       
       for(UINT i=nObjects; i<mObjects.size(); i++)
-        mObjects[i].SetPosition(XMFLOAT3(realPos.x, 0.0f, realPos.y));
+        mObjects[i].SetPosition(XMFLOAT3((FLOAT)realPos.x, 0.0f, (FLOAT)realPos.y));
     }
     
   sort(mObjects.begin(), mObjects.end());
@@ -255,7 +255,7 @@ void Level::FillFloor()
 
 bool Level::IsTileEmpty(Node aN)
 {
-  Node mapPos(-(aN.y - mHeight/2), aN.x + mWidth/2);
+  Node mapPos(-(aN.y - (int)(mHeight / 2)), aN.x + mWidth / 2);
   if(WALL == mMap[mapPos.x][mapPos.y])
     return false;
     

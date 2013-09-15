@@ -15,17 +15,17 @@ bool LevelStart::Set(string aPackName, int aLevelNumber)
 {
   mTimer = 0.0f;
 
-  int packTextY = gScreenH / 2 - 140;
-  int levelTextY = gScreenH / 2;
-  int countdownTextY = gScreenH / 2 + 80;
+  float packTextY = gScreenH / 2.0f - 140.0f;
+  float levelTextY = gScreenH / 2.0f;
+  float countdownTextY = gScreenH / 2.0f + 80.0f;
 
-  mPackText.Set(aPackName.c_str(), XMFLOAT2(gScreenW / 2, packTextY), TEXTALIGN_CENTER, &mPackFont);
+  mPackText.Set(aPackName.c_str(), XMFLOAT2(gScreenW / 2.0f, packTextY), TEXTALIGN_CENTER, &mPackFont);
 
   string nLevel = "LEVEL " + Gine::Utils::ToString(aLevelNumber);
-  mLevelText.Set(nLevel.c_str(), XMFLOAT2(gScreenW / 2, levelTextY), TEXTALIGN_CENTER, &mLevelFont);
+  mLevelText.Set(nLevel.c_str(), XMFLOAT2(gScreenW / 2.0f, levelTextY), TEXTALIGN_CENTER, &mLevelFont);
 
   string countdown = Gine::Utils::ToString(COUNTDOWN);
-  mCountdownText.Set(countdown.c_str(),  XMFLOAT2(gScreenW / 2, countdownTextY), TEXTALIGN_CENTER, &mCountdownFont);
+  mCountdownText.Set(countdown.c_str(),  XMFLOAT2(gScreenW / 2.0f, countdownTextY), TEXTALIGN_CENTER, &mCountdownFont);
 
   return true;
 }

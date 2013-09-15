@@ -30,9 +30,9 @@ bool Gameplay::Init()
   Effects::BasicFX->SetDirLight(&light);
 
   // Set UI
-  int screenMargin = 20;
-  int iconH = 40;
-  int fontX = 60;
+  float screenMargin = 20.0f;
+  float iconH = 40.0f;
+  float fontX = 60.0f;
 
   mUIFont.Load("Lucida Console", 30, XMCOLOR(0xffeeeeec), FONTSTYLE_REGUAR);
   mUISteps.Set("", XMFLOAT2(fontX, screenMargin), TEXTALIGN_LEFT, &mUIFont);
