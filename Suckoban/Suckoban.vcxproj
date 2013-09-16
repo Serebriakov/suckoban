@@ -144,7 +144,6 @@
     <None Include="data\fx\Ssao.fx" />
     <None Include="data\fx\SsaoBlur.fx" />
     <None Include="data\fx\SsaoNormalDepth.fx" />
-    <None Include="data\gfx\models\player.x" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
