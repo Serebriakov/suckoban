@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <ExecutablePath>P:\Development\DirectX SDK\Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>P:\Development\Assimp SDK\include;P:\Development\DirectX SDK\Include;P:\Development\FMOD SDK\api\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>P:\Development\DirectX SDK\Lib\x86;P:\Development\Assimp SDK\lib\x86;P:\Development\FMOD SDK\api\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;D3DCompiler.lib;Effects11.lib;dxerr.lib;dxgi.lib;dxguid.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
