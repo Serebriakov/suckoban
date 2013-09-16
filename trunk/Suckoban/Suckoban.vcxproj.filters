@@ -245,6 +245,5 @@
     <None Include="data\fx\SsaoNormalDepth.fx">
       <Filter>FX</Filter>
     </None>
-    <None Include="data\gfx\models\player.x" />
   </ItemGroup>
 </Project>
