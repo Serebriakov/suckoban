@@ -127,6 +127,9 @@
     <ClInclude Include="code\Gameplay.h">
       <Filter>Source\States</Filter>
     </ClInclude>
+    <ClInclude Include="code\PostProcess.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -228,22 +231,16 @@
     <ClCompile Include="code\Gameplay.cpp">
       <Filter>Source\States</Filter>
     </ClCompile>
+    <ClCompile Include="code\PostProcess.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\fx\Basic.fx">
+    <CustomBuild Include="data\fx\Basic.fx">
       <Filter>FX</Filter>
-    </None>
-    <None Include="data\fx\LightHelper.fx">
+    </CustomBuild>
+    <CustomBuild Include="data\fx\PostProcess.fx">
       <Filter>FX</Filter>
-    </None>
-    <None Include="data\fx\Ssao.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="data\fx\SsaoBlur.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="data\fx\SsaoNormalDepth.fx">
-      <Filter>FX</Filter>
-    </None>
+    </CustomBuild>
   </ItemGroup>
 </Project>

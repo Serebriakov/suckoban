@@ -2,6 +2,7 @@
 #include "Effects.h"
 #include "Sprite.h"
 #include "Input.h"
+#include "PostProcess.h"
 
 Gameplay::Gameplay() :
   miLevel(0),
@@ -146,8 +147,8 @@ void Gameplay::DrawUI()
 
 void Gameplay::Draw()
 {
-  // Clear screen
-  Gine::ClearRTVAndDSV(&Colors::Black);
+  // Switch to backbuffer
+  PostProcess::RenderToBackBuffer();
 
   // Update effects camera
 	XMMATRIX view     = mCamera.View();
@@ -158,6 +159,9 @@ void Gameplay::Draw()
 
   // Level draw
   mLevel->Draw();
+
+  // Draw back buffer to screen
+  PostProcess::DrawBackBuffer();
   
   // UI draw
   DrawUI();

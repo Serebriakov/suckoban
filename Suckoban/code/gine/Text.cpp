@@ -55,15 +55,17 @@ void Text::Set(const char* text, XMFLOAT2 position, TextAlign align, Font* font)
   Position = position;
   Align = align;
   DisplayFont = font;
+  mTextXTween.Stop();
+  mTextYTween.Stop();
 }
 
 void Text::Tick(float dt)
 {
   if(mTextXTween.IsOn() || mTextYTween.IsOn()) {
-    Position.x = mTextXTween.GetValue();
-    Position.y = mTextYTween.GetValue();
     mTextXTween.Tick(dt);
     mTextYTween.Tick(dt);
+    Position.x = mTextXTween.GetValue();
+    Position.y = mTextYTween.GetValue();
   }
 }
 

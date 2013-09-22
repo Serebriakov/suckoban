@@ -22,6 +22,12 @@ namespace Vertex
     BYTE     BoneIndices[4];
 	};
 
+  struct Apla
+  {
+    XMFLOAT3 Pos;
+    XMFLOAT2 Tex;
+  };
+
   struct Particle
 	{
 		XMFLOAT3 InitialPos;
@@ -43,6 +49,7 @@ class InputLayoutDesc
 public:
 	// Init like const int A::a[4] = {0, 1, 2, 3}; in .cpp file.
 	static const D3D11_INPUT_ELEMENT_DESC Basic32[6];
+	static const D3D11_INPUT_ELEMENT_DESC Apla[2];
 	static const D3D11_INPUT_ELEMENT_DESC InstancedBasic32[10];
 	static const D3D11_INPUT_ELEMENT_DESC Particle[5];
 	static const D3D11_INPUT_ELEMENT_DESC Billboard[2];
@@ -55,6 +62,7 @@ public:
 	static void DestroyAll();
 
 	static ID3D11InputLayout* Basic32;
+	static ID3D11InputLayout* Apla;
 	static ID3D11InputLayout* InstancedBasic32;
 	static ID3D11InputLayout* Particle;
 	static ID3D11InputLayout* Billboard;

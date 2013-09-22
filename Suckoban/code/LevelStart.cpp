@@ -1,6 +1,8 @@
 #include "LevelStart.h"
 #include "GineUtils.h"
 
+const int COUNTDOWN = 1;
+
 bool LevelStart::Init()
 {
   State::Init();

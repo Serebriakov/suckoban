@@ -35,6 +35,7 @@ BasicEffect::BasicEffect(ID3D11Device* device, const std::wstring& filename)
 	BasicTech     = mFX->GetTechniqueByName("BasicTech");
 	InstancedTech = mFX->GetTechniqueByName("InstancedTech");
 	SpriteTech    = mFX->GetTechniqueByName("SpriteTech");
+	AplaTech      = mFX->GetTechniqueByName("AplaTech");
 
   ViewProj          = mFX->GetVariableByName("gViewProj")->AsMatrix();
 	World             = mFX->GetVariableByName("gWorld")->AsMatrix();
@@ -180,6 +181,21 @@ SpriteEffect::~SpriteEffect()
 }
 #pragma endregion
 
+#pragma region PostProcessEffect
+PostProcessEffect::PostProcessEffect(ID3D11Device* device, const std::wstring& filename)
+	: Effect(device, filename)
+{
+  DefaultTech   = mFX->GetTechniqueByName("DefaultTech");
+  GreyscaleTech = mFX->GetTechniqueByName("GreyscaleTech");
+  BlurHTech     = mFX->GetTechniqueByName("BlurHTech");
+  BlurVTech     = mFX->GetTechniqueByName("BlurVTech");
+
+	Screenshot    = mFX->GetVariableByName("Screenshot")->AsShaderResource();
+  Transition    = mFX->GetVariableByName("gTransition")->AsScalar();
+	WindowSize    = mFX->GetVariableByName("gWindowSize")->AsVector();
+}
+#pragma endregion
+
 #pragma region BillboardEffect
 BillboardEffect::BillboardEffect(ID3D11Device* device, const std::wstring& filename)
 	: Effect(device, filename)
@@ -205,6 +221,7 @@ BillboardEffect::~BillboardEffect()
 
 BasicEffect*    Effects::BasicFX = 0;
 SpriteEffect*   Effects::SpriteFX = 0;
+PostProcessEffect* Effects::PostProcessFX = 0;
 //ParticleEffect* Effects::FireFX = 0;
 SsaoNormalDepthEffect* Effects::SsaoNormalDepthFX = 0;
 SsaoEffect*            Effects::SsaoFX            = 0;
@@ -216,6 +233,7 @@ void Effects::InitAll(ID3D11Device* device)
 {
 	BasicFX              = new BasicEffect   (device, L"data/fx/Basic.fxo");
 	SpriteFX             = new SpriteEffect  (device, L"data/fx/Sprite.fxo"); 
+  PostProcessFX = new PostProcessEffect(device, L"data/fx/PostProcess.fxo");
 	//FireFX               = new ParticleEffect(device, L"FX/Fire.fxo"); 
 
   SsaoNormalDepthFX = new SsaoNormalDepthEffect(device, L"data/fx/SsaoNormalDepth.fxo");
@@ -231,6 +249,7 @@ void Effects::DestroyAll()
 {
 	SafeDelete(BasicFX);
 	SafeDelete(SpriteFX);
+  SafeDelete(PostProcessFX);
 	//SafeDelete(FireFX);
 
   SafeDelete(SsaoNormalDepthFX);
