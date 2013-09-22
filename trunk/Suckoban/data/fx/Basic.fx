@@ -188,6 +188,19 @@ VertexOut SpriteVS(VertexIn vin)
 	return vout;
 }
 
+VertexOut AplaVS(VertexIn vin)
+{
+  VertexOut vout;
+
+  vout.PosW = vin.PosL;
+  vout.NormalW = vin.NormalL;
+  vout.TangentW = vin.TangentL;
+  vout.PosH = float4(vout.PosW, 1.0f);
+  vout.Tex = vin.Tex;
+
+  return vout;
+}
+
 //------------------------------------------------------------------------------
 // PIXEL SHADERS
 //------------------------------------------------------------------------------
@@ -292,6 +305,13 @@ float4 SpritePS(VertexOut pin) : SV_Target
 	return gDiffuseMap.Sample(samAnisotropic, pin.Tex);
 }
 
+float4 AplaPS(VertexOut pin) : SV_Target
+{
+	float4 sampl = gDiffuseMap.Sample(samAnisotropic, pin.Tex);
+  float avg = (sampl.r + sampl.g + sampl.b) / 3.0f;
+  return float4(avg, avg, avg, 1.0f);
+}
+
 //------------------------------------------------------------------------------
 // TECHNIQUES
 //------------------------------------------------------------------------------
@@ -325,5 +345,15 @@ technique11 SpriteTech
     SetVertexShader   (CompileShader(vs_4_0, SpriteVS()));
     SetGeometryShader (NULL);
     SetPixelShader    (CompileShader(ps_4_0, SpritePS()));
+  }
+}
+
+technique11 AplaTech
+{
+  pass P0
+  {
+    SetVertexShader   (CompileShader(vs_4_0, AplaVS()));
+    SetGeometryShader (NULL);
+    SetPixelShader    (CompileShader(ps_4_0, AplaPS()));
   }
 }

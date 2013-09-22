@@ -1,10 +1,11 @@
 #include "GineUtils.h"
 #include "Input.h"
+#include "PostProcess.h"
 #include "Gameplay.h"
 
 // Main game properties
 const char* GAME_TITLE = "Suckoban";
-const bool ENABLE_4XMSAA = true;
+const bool ENABLE_4XMSAA = false;
 const bool ENABLE_SSAO = false;
 const int PANIC_CLOSE_KEY = VK_F4;
 
@@ -108,6 +109,7 @@ void Game::UpdateScene(float dt)
     PostQuitMessage(0);
 
   Input::Tick(dt);
+  PostProcess::Tick(dt);
 
   EntryState->Tick(dt);
 

@@ -8,6 +8,8 @@
 #include "Model.h"
 #include "Sprite.h"
 #include "Input.h"
+#include "GeometryGenerator.h"
+#include "PostProcess.h"
 
 namespace Gine
 {
@@ -29,20 +31,22 @@ namespace Gine
     InputLayouts::InitAll(gDevice);
     RenderStates::InitAll(gDevice);
 
-    if(!Model::Init())
-    {
+    if(!PostProcess::Init()) {
+      Info::Fatal("Post process module init failed");
+      return false;
+    }
+
+    if(!Model::Init()) {
       Info::Fatal("Model module init failed");
       return false;
     }
 
-    if(!Input::Init())
-    {
+    if(!Input::Init()) {
       Info::Fatal("Input module init failed");
       return false;
     }
 
-    if(!Sprite::Init())
-    {
+    if(!Sprite::Init()) {
       Info::Fatal("Sprite module init failed");
       return false;
     }
@@ -52,15 +56,21 @@ namespace Gine
 
   void Destroy()
   {
-    Effects::DestroyAll();
-    InputLayouts::DestroyAll();
-    RenderStates::DestroyAll();
     Sprite::Destroy();
+    PostProcess::Destroy();
+    RenderStates::DestroyAll();
+    InputLayouts::DestroyAll();
+    Effects::DestroyAll();
   }
 
   void ClearRTVAndDSV(const XMVECTORF32* color)
   {
     gContext->ClearRenderTargetView(gRenderTargetView, reinterpret_cast<const float*>(color));
+    gContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+  }
+
+  void ClearDSV()
+  {
     gContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
   }
 }

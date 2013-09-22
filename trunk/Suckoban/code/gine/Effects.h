@@ -58,6 +58,7 @@ public:
 	ID3DX11EffectTechnique* BasicTech;
 	ID3DX11EffectTechnique* InstancedTech;
 	ID3DX11EffectTechnique* SpriteTech;
+	ID3DX11EffectTechnique* AplaTech;
 	
 	ID3DX11EffectMatrixVariable* ViewProj;
 	ID3DX11EffectMatrixVariable* World;
@@ -236,6 +237,29 @@ public:
 };
 #pragma endregion
 
+#pragma region PostProcessEffect
+class PostProcessEffect : public Effect
+{
+public:
+	PostProcessEffect(ID3D11Device* device, const std::wstring& filename);
+  ~PostProcessEffect() {}
+
+	void SetScreenshot(ID3D11ShaderResourceView* screenshot) { Screenshot->SetResource(screenshot); }
+  void SetTransition(float transition) { Transition->SetFloat(transition); }
+  void SetWindowSize(const XMFLOAT2& v) { WindowSize->SetRawValue(&v, 0, sizeof(XMFLOAT2)); }
+
+	ID3DX11EffectTechnique* DefaultTech;
+	ID3DX11EffectTechnique* GreyscaleTech;
+	ID3DX11EffectTechnique* BlurHTech;
+	ID3DX11EffectTechnique* BlurVTech;
+
+	ID3DX11EffectShaderResourceVariable* Screenshot;
+  ID3DX11EffectScalarVariable* Transition;
+  ID3DX11EffectVectorVariable* WindowSize;
+
+};
+#pragma endregion
+
 #pragma region BillboardEffect
 class BillboardEffect : public Effect
 {
@@ -274,6 +298,7 @@ public:
 	static void DestroyAll();
 
 	static BasicEffect*           BasicFX;
+  static PostProcessEffect*     PostProcessFX;
 	static SpriteEffect*          SpriteFX;
  // static ParticleEffect*        FireFX;
 	static SsaoNormalDepthEffect* SsaoNormalDepthFX;

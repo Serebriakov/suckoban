@@ -1,17 +1,22 @@
 #include "LevelPause.h"
 #include "Gine.h"
 #include "Input.h"
+#include "PostProcess.h"
+
+const float TRANSITION_TIME = 0.3f;
 
 void LevelPause::Enter()
 {
+  PostProcess::SetEffect(POST_EFFECT_BLUR, Easing::OUTX, TRANSITION_TIME);
   mPauseText.Set("PAUSE", XMFLOAT2(-200.0f, gScreenH / 2.0f - 100), TEXTALIGN_CENTER, &mPauseFont);
-  mPauseText.MoveTo(XMFLOAT2(gScreenW / 2.0f, gScreenH / 2.0f - 100.0f), 0.3f, OUTX);
+  mPauseText.MoveTo(XMFLOAT2(gScreenW / 2.0f, gScreenH / 2.0f - 100.0f), TRANSITION_TIME, OUTX);
   mEntering = true;
 }
 
 void LevelPause::Exit()
 {
-  mPauseText.MoveTo(XMFLOAT2((FLOAT)gScreenW, gScreenH / 2.0f - 100), 0.3f, INX);
+  PostProcess::ClearEffect(Easing::INX, TRANSITION_TIME);
+  mPauseText.MoveTo(XMFLOAT2((FLOAT)gScreenW, gScreenH / 2.0f - 100), TRANSITION_TIME, INX);
   mExiting = true;
 }
 

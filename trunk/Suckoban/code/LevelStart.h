@@ -3,8 +3,6 @@
 #include "Text.h"
 using namespace Gine;
 
-const int COUNTDOWN = 3;
-
 /// <summary>
 /// Countdown at the begining of the level with level's number and pack's name.
 /// </summary>

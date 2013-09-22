@@ -27,6 +27,12 @@ const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::InstancedBasic32[10] =
   {"WORLD",       3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1}
 };
 
+const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::Apla[2] = 
+{
+	{"POSITION",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+};
+
 const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::Particle[5] = 
 {
 	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -47,6 +53,7 @@ const D3D11_INPUT_ELEMENT_DESC InputLayoutDesc::Billboard[2] =
 #pragma region InputLayouts
 
 ID3D11InputLayout* InputLayouts::Basic32 = 0;
+ID3D11InputLayout* InputLayouts::Apla = 0;
 ID3D11InputLayout* InputLayouts::InstancedBasic32 = 0;
 ID3D11InputLayout* InputLayouts::Particle = 0;
 ID3D11InputLayout* InputLayouts::Billboard = 0;
@@ -67,6 +74,10 @@ void InputLayouts::InitAll(ID3D11Device* device)
                                passDesc.pIAInputSignature, 
 		                           passDesc.IAInputSignatureSize, &InstancedBasic32));
 
+  // Apla
+  Effects::PostProcessFX->DefaultTech->GetPassByIndex(0)->GetDesc(&passDesc);
+	HR(device->CreateInputLayout(InputLayoutDesc::Apla, 2, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &Apla));
+
 
 	//// Particle
 	//Effects::FireFX->StreamOutTech->GetPassByIndex(0)->GetDesc(&passDesc);
@@ -86,6 +97,7 @@ void InputLayouts::DestroyAll()
 {
 	ReleaseCOM(Basic32);
 	ReleaseCOM(InstancedBasic32);
+	ReleaseCOM(Apla);
 	//ReleaseCOM(Particle);
 	//ReleaseCOM(Billboard);
 }
