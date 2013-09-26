@@ -88,10 +88,13 @@
     <ClInclude Include="code\gine\MathHelper.h" />
     <ClInclude Include="code\gine\Mesh.h" />
     <ClInclude Include="code\gine\Model.h" />
+    <ClInclude Include="code\gine\PostProcess.h" />
     <ClInclude Include="code\gine\RenderStates.h" />
     <ClInclude Include="code\gine\resource.h" />
     <ClInclude Include="code\gine\Sprite.h" />
     <ClInclude Include="code\gine\SpriteBatch.h" />
+    <ClInclude Include="code\gine\State.h" />
+    <ClInclude Include="code\gine\StateMachine.h" />
     <ClInclude Include="code\gine\Text.h" />
     <ClInclude Include="code\gine\Texture.h" />
     <ClInclude Include="code\gine\Tween.h" />
@@ -101,8 +104,6 @@
     <ClInclude Include="code\LevelPause.h" />
     <ClInclude Include="code\LevelStart.h" />
     <ClInclude Include="code\Moveable.h" />
-    <ClInclude Include="code\PostProcess.h" />
-    <ClInclude Include="code\State.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\Gameplay.cpp" />
@@ -124,9 +125,12 @@
     <ClCompile Include="code\gine\MathHelper.cpp" />
     <ClCompile Include="code\gine\Mesh.cpp" />
     <ClCompile Include="code\gine\Model.cpp" />
+    <ClCompile Include="code\gine\PostProcess.cpp" />
     <ClCompile Include="code\gine\RenderStates.cpp" />
     <ClCompile Include="code\gine\Sprite.cpp" />
     <ClCompile Include="code\gine\SpriteBatch.cpp" />
+    <ClCompile Include="code\gine\State.cpp" />
+    <ClCompile Include="code\gine\StateMachine.cpp" />
     <ClCompile Include="code\gine\Text.cpp" />
     <ClCompile Include="code\gine\Texture.cpp" />
     <ClCompile Include="code\gine\Tween.cpp" />
@@ -137,8 +141,6 @@
     <ClCompile Include="code\LevelStart.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\Moveable.cpp" />
-    <ClCompile Include="code\PostProcess.cpp" />
-    <ClCompile Include="code\State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="data\fx\Basic.fx">

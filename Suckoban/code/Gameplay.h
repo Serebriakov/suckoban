@@ -12,30 +12,30 @@
 
 class Gameplay : public State
 {
-public:
-  Gameplay();
-  ~Gameplay() {}
-  
+public:  
+  static Gameplay* GetInstance() { return &mGameplay; }
+
   bool Init();
+  bool Destroy() { return true; }
+
   void Tick(float dt);
   void Draw();
   
 private:
-  State*     mActiveSubState;
-  LevelStart mLevelStartState;
-  LevelPause mLevelPauseState;
+  static Gameplay mGameplay;
 
   int miLevel;
   Level* mLevel;
   vector<Level> mLevels;
-
-  bool mPaused;
 
   Camera mCamera;
   Font mUIFont;
   Text mUISteps;
   Text mUIPushes;
   Text mUITime;
+
+  Gameplay();
+  ~Gameplay() {}
 
   void UpdateUI(float dt);
   void UpdateCamera(float dt);

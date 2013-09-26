@@ -115,9 +115,6 @@
     <ClInclude Include="code\gine\xnacollision.h">
       <Filter>Gine\Internal</Filter>
     </ClInclude>
-    <ClInclude Include="code\State.h">
-      <Filter>Source\States</Filter>
-    </ClInclude>
     <ClInclude Include="code\LevelStart.h">
       <Filter>Source\States</Filter>
     </ClInclude>
@@ -127,7 +124,13 @@
     <ClInclude Include="code\Gameplay.h">
       <Filter>Source\States</Filter>
     </ClInclude>
-    <ClInclude Include="code\PostProcess.h">
+    <ClInclude Include="code\gine\PostProcess.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\StateMachine.h">
+      <Filter>Gine</Filter>
+    </ClInclude>
+    <ClInclude Include="code\gine\State.h">
       <Filter>Gine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -219,9 +222,6 @@
     <ClCompile Include="code\Moveable.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="code\State.cpp">
-      <Filter>Source\States</Filter>
-    </ClCompile>
     <ClCompile Include="code\LevelStart.cpp">
       <Filter>Source\States</Filter>
     </ClCompile>
@@ -231,7 +231,13 @@
     <ClCompile Include="code\Gameplay.cpp">
       <Filter>Source\States</Filter>
     </ClCompile>
-    <ClCompile Include="code\PostProcess.cpp">
+    <ClCompile Include="code\gine\PostProcess.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\StateMachine.cpp">
+      <Filter>Gine</Filter>
+    </ClCompile>
+    <ClCompile Include="code\gine\State.cpp">
       <Filter>Gine</Filter>
     </ClCompile>
   </ItemGroup>

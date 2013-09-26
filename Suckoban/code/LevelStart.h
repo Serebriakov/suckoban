@@ -9,16 +9,20 @@ using namespace Gine;
 
 class LevelStart : public State
 {
-public:
-  LevelStart() {}
-  ~LevelStart() {}
-  
+public:  
+  static LevelStart* GetInstance() { return &mLevelStart; }
+
   bool Init();
+  bool Destroy() { return true; }
+
   bool Set(string packName, int levelNumber);
+
   void Tick(float dt);
   void Draw();
-  
+
 private:
+  static LevelStart mLevelStart;
+
   float mTimer;
 
   Font mPackFont;
@@ -28,4 +32,7 @@ private:
   Text mPackText;
   Text mLevelText;
   Text mCountdownText;
+
+  LevelStart() : State() {}
+  ~LevelStart() {}
 };

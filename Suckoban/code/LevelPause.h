@@ -10,17 +10,23 @@ using namespace Gine;
 class LevelPause : public State
 {
 public:
-  LevelPause() {}
-  ~LevelPause() {}
-  
+  static LevelPause* GetInstance() { return &mLevelPause; }
+
   bool Init();
-  void Tick(float dt);
-  void Draw();
+  bool Destroy() { return true; }
 
   void Enter();
   void Exit();
-  
+
+  void Tick(float dt);
+  void Draw();
+
 private:
+  static LevelPause mLevelPause;
+
   Font mPauseFont;
   Text mPauseText;
+  
+  LevelPause() : State() {}
+  ~LevelPause() {}
 };
