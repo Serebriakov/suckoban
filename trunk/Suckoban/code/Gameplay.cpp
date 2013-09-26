@@ -4,15 +4,20 @@
 #include "Input.h"
 #include "PostProcess.h"
 
+Gameplay Gameplay::mGameplay;
+
 Gameplay::Gameplay() :
+  State(),
   miLevel(0),
-  mLevel(0),
-  mPaused(true)
+  mLevel(0)
 {
 }
 
 bool Gameplay::Init()
 {
+  if(mInitialized)
+    Info::Fatal("Gameplay already initialized");
+
   if(!Level::Load("data/maps/maps.txt", mLevels))
     return false;
 
@@ -38,15 +43,10 @@ bool Gameplay::Init()
   mUIFont.Load("Lucida Console", 30, XMCOLOR(0xffeeeeec), FONTSTYLE_REGUAR);
   mUISteps.Set("", XMFLOAT2(fontX, screenMargin), TEXTALIGN_LEFT, &mUIFont);
   mUIPushes.Set("", XMFLOAT2(fontX, iconH + screenMargin), TEXTALIGN_LEFT, &mUIFont);
-  mUITime.Set("", XMFLOAT2(Gine::gScreenW - 60, 20), TEXTALIGN_RIGHT, &mUIFont);
-  
-  // Set substates
-  mLevelStartState.Init();
-  mLevelStartState.Set("ORIGINAL", mLevel->GetNumber());
+  mUITime.Set("", XMFLOAT2(Gine::gScreenW - 60.0f, 20.0f), TEXTALIGN_RIGHT, &mUIFont);
 
-  mLevelPauseState.Init();
+  mInitialized = true;
 
-  mActiveSubState = &mLevelStartState;
   return true;
 }
 
@@ -86,45 +86,25 @@ void Gameplay::Tick(float dt)
   UpdateCamera(dt);
   UpdateUI(dt);
 
-  if(mActiveSubState)
-  {
-    mActiveSubState->Tick(dt);
-
-    if(!mActiveSubState->IsOn()) 
-    {
-      mActiveSubState = 0;
-      mPaused = false;
-      return;
-    }
-  }
-
   if(mPaused)
     return;
 
   mLevel->Tick(dt);
   if(mLevel->IsSolved())
   {
-    mPaused = true;
     mLevel = &mLevels[++miLevel];
-    mLevelStartState.Set("ORIGNAL", mLevel->GetNumber());
-    mActiveSubState = &mLevelStartState;
     mLevel->Reset();
     return;
   }
 
   if(Input::Released('R'))
   {
-    mPaused = true;
-    mLevelStartState.Set("ORIGNAL", mLevel->GetNumber());
-    mActiveSubState = &mLevelStartState;
     mLevel->Reset();
     return;
   }
 
   if(Input::Released('P'))
   {
-    mPaused = true;
-    mActiveSubState = &mLevelPauseState;
     return;
   }
 }
@@ -165,8 +145,4 @@ void Gameplay::Draw()
   
   // UI draw
   DrawUI();
-
-  // Substates draw
-  if(mActiveSubState)
-    mActiveSubState->Draw();
 }

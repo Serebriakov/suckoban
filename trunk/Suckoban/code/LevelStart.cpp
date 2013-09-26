@@ -1,5 +1,8 @@
 #include "LevelStart.h"
 #include "GineUtils.h"
+#include "PostProcess.h"
+
+LevelStart LevelStart::mLevelStart;
 
 const int COUNTDOWN = 1;
 
@@ -15,6 +18,8 @@ bool LevelStart::Init()
 
 bool LevelStart::Set(string aPackName, int aLevelNumber)
 {
+  //PostProcess::SetEffect(POST_EFFECT_GREYSCALE, Easing::INX, 0.0f);
+
   mTimer = 0.0f;
 
   float packTextY = gScreenH / 2.0f - 140.0f;
@@ -34,8 +39,6 @@ bool LevelStart::Set(string aPackName, int aLevelNumber)
 
 void LevelStart::Tick(float dt)
 {
-  mOn = true;
-
   int oldTime = (int)mTimer;
   mTimer += dt;
   int time = (int)mTimer;
@@ -48,11 +51,13 @@ void LevelStart::Tick(float dt)
       mPackText.MoveTo(XMFLOAT2(mPackText.Position.x, -100), 1.0f, BACKIN);
       mLevelText.MoveTo(XMFLOAT2(mLevelText.Position.x, -100), 1.0f, BACKIN);
       mCountdownText.MoveTo(XMFLOAT2(mCountdownText.Position.x, -100), 1.0f, BACKIN);
+      
+      //PostProcess::ClearEffect(INX, 1.0f);
     }
   }
 
-  if(time >= COUNTDOWN + 1)
-    mOn = false;
+  //if(time >= COUNTDOWN + 1)
+  //  mOn = false;
 
   mPackText.Tick(dt);
   mLevelText.Tick(dt);

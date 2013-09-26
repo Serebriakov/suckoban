@@ -2,12 +2,13 @@
 #include "Input.h"
 #include "PostProcess.h"
 #include "Gameplay.h"
+#include "StateMachine.h"
 
 // Main game properties
-const char* GAME_TITLE = "Suckoban";
-const bool ENABLE_4XMSAA = false;
-const bool ENABLE_SSAO = false;
-const int PANIC_CLOSE_KEY = VK_F4;
+const char* GAME_TITLE      = "Suckoban";
+const bool  ENABLE_4XMSAA   = false;
+const bool  ENABLE_SSAO     = false;
+const int   PANIC_CLOSE_KEY = VK_F4;
 
 /// <summary>
 /// Main Game class
@@ -19,8 +20,6 @@ class Game : public D3DApp
 public:
   Game(HINSTANCE hInstance);
   ~Game();
-
-  State* EntryState;
 
   bool Init();
   void OnResize();
@@ -69,8 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 }
 
 Game::Game(HINSTANCE hInstance) :
-  D3DApp(hInstance),
-  EntryState(0)
+  D3DApp(hInstance)
 {
   mMainWndCaption = Utils::ToWString(GAME_TITLE);
   mEnable4xMsaa = ENABLE_4XMSAA;
@@ -79,8 +77,7 @@ Game::Game(HINSTANCE hInstance) :
 
 Game::~Game()
 {
-  delete EntryState;
-  md3dImmediateContext->ClearState();
+  gContext->ClearState();
   Gine::Destroy();
 }
 
@@ -91,9 +88,8 @@ bool Game::Init()
   if(!Gine::Init())
     return false;
 
-  EntryState = new Gameplay();
-  if(!EntryState->Init())
-    return false;
+  Gameplay::GetInstance()->Init();
+  StateMachine::Push(Gameplay::GetInstance());
 
   return true;
 }
@@ -111,13 +107,13 @@ void Game::UpdateScene(float dt)
   Input::Tick(dt);
   PostProcess::Tick(dt);
 
-  EntryState->Tick(dt);
+  StateMachine::Tick(dt);
 
   gCamera->UpdateViewMatrix();
 }
 
 void Game::DrawScene()
 {  
-  EntryState->Draw();
+  StateMachine::Draw();
   HR(mSwapChain->Present(0, 0));
 }
