@@ -2,6 +2,7 @@
 #include "Gine.h"
 #include "Input.h"
 #include "PostProcess.h"
+#include "StateMachine.h"
 
 LevelPause LevelPause::mLevelPause;
 
@@ -9,26 +10,36 @@ const float TRANSITION_TIME = 0.3f;
 
 void LevelPause::Enter()
 {
-  //PostProcess::SetEffect(POST_EFFECT_BLUR, Easing::OUTX, TRANSITION_TIME);
-  mPauseText.Set("PAUSE", XMFLOAT2(-200.0f, gScreenH / 2.0f - 100), TEXTALIGN_CENTER, &mPauseFont);
-  mPauseText.MoveTo(XMFLOAT2(gScreenW / 2.0f, gScreenH / 2.0f - 100.0f), TRANSITION_TIME, OUTX);
+  Alive = true;
+  mPostProcess.SetTransition(TRANSITION_FADEIN, OUTX, TRANSITION_TIME);
 }
 
 void LevelPause::Exit()
 {
-  //PostProcess::ClearEffect(Easing::INX, TRANSITION_TIME);
-  mPauseText.MoveTo(XMFLOAT2((FLOAT)gScreenW, gScreenH / 2.0f - 100), TRANSITION_TIME, INX);
+  mPostProcess.SetTransition(TRANSITION_FADEOUT, INX, TRANSITION_TIME);
+  KillAfter(TRANSITION_TIME);
 }
 
 bool LevelPause::Init()
 {
   State::Init();
-  return mPauseFont.Load("Lucida Console", 100, XMCOLOR(0xffeeeeec), FONTSTYLE_REGUAR);
+  if(!mPauseFont.Load("Lucida Console", 100, XMCOLOR(0xffeeeeec), FONTSTYLE_REGUAR))
+    Info::Fatal("LevelPause init failed");
+  
+  mPauseText.Set("PAUSE", XMFLOAT2(gScreenW / 2.0f, gScreenH / 2.0f - 100), TEXTALIGN_CENTER, &mPauseFont);
+
+  mInitialized = true;
+  return true;
 }
 
 void LevelPause::Tick(float dt)
 {
-  mPauseText.Tick(dt);
+  State::Tick(dt);
+
+  if(Alive && mShutdown < 0.0f) {
+    if(Input::Released('P'))
+      StateMachine::Pop();
+  }
 }
 
 void LevelPause::Draw()

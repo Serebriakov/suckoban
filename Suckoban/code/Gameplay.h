@@ -15,8 +15,11 @@ class Gameplay : public State
 public:  
   static Gameplay* GetInstance() { return &mGameplay; }
 
+  void Pause();
+  void Resume();
+
   bool Init();
-  bool Destroy() { return true; }
+  bool Destroy() { return State::Destroy(); }
 
   void Tick(float dt);
   void Draw();

@@ -248,5 +248,8 @@
     <CustomBuild Include="data\fx\PostProcess.fx">
       <Filter>FX</Filter>
     </CustomBuild>
+    <CustomBuild Include="data\fx\Transition.fx">
+      <Filter>FX</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

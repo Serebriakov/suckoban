@@ -80,5 +80,8 @@ namespace Gine
     string ToString(const int i);
     string Format(const char* text, ...);
     string VFormat(const char* text, va_list ap);
+
+    // Effects
+    ID3D11Texture2D* CreateDefaultTexture2D();
   }
 }

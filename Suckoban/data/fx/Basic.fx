@@ -302,7 +302,9 @@ float4 DefaultPS(VertexOut pin,
 
 float4 SpritePS(VertexOut pin) : SV_Target
 {
-	return gDiffuseMap.Sample(samAnisotropic, pin.Tex);
+	float4 col = gDiffuseMap.Sample(samAnisotropic, pin.Tex);
+  //return float4(col.r,col.g,col.b,1.0f);
+  return col;
 }
 
 float4 AplaPS(VertexOut pin) : SV_Target

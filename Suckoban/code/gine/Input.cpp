@@ -10,6 +10,12 @@ void Input::RefreshKeys(bool* aFrame)
     aFrame[i] = (bool)(GetAsyncKeyState(i) & 0x8000);
 }
 
+void Input::ClearBuffers()
+{
+  ZeroMemory(mLastFrame, sizeof(bool) * N_VIRTUAL_KEYS);
+  ZeroMemory(mThisFrame, sizeof(bool) * N_VIRTUAL_KEYS);
+}
+
 bool Input::Init()
 {
   RefreshKeys(mLastFrame);

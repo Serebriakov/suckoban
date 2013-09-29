@@ -167,3 +167,24 @@ string Utils::VFormat(const char *fmt, va_list ap)
     buf = &dynamicbuf[0];
   }
 }
+
+ID3D11Texture2D* Utils::CreateDefaultTexture2D()
+{
+	D3D11_TEXTURE2D_DESC texDesc;
+  texDesc.Width              = gScreenW;
+  texDesc.Height             = gScreenH;
+	texDesc.MipLevels          = 1;
+	texDesc.ArraySize          = 1;
+	texDesc.SampleDesc.Count   = 1;
+  texDesc.SampleDesc.Quality = 0;
+	texDesc.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.Usage              = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags     = 0; 
+	texDesc.MiscFlags          = 0;
+
+	ID3D11Texture2D* texture = 0;
+	HR(gDevice->CreateTexture2D(&texDesc, 0, &texture));
+
+  return texture;
+}

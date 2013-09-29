@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "Input.h"
 #include "PostProcess.h"
+#include "StateMachine.h"
 
 Gameplay Gameplay::mGameplay;
 
@@ -17,6 +18,8 @@ bool Gameplay::Init()
 {
   if(mInitialized)
     Info::Fatal("Gameplay already initialized");
+
+  State::Init();
 
   if(!Level::Load("data/maps/maps.txt", mLevels))
     return false;
@@ -45,9 +48,24 @@ bool Gameplay::Init()
   mUIPushes.Set("", XMFLOAT2(fontX, iconH + screenMargin), TEXTALIGN_LEFT, &mUIFont);
   mUITime.Set("", XMFLOAT2(Gine::gScreenW - 60.0f, 20.0f), TEXTALIGN_RIGHT, &mUIFont);
 
+  if(!LevelPause::GetInstance()->Init())
+    return false;
+
   mInitialized = true;
 
   return true;
+}
+
+void Gameplay::Pause()
+{
+  State::Pause();
+  mPostProcess.SetPostProcessFilter(POST_PROCESS_FILTER_BLUR, NONE, 0.3f);
+}
+
+void Gameplay::Resume()
+{
+  State::Resume();
+  mPostProcess.ClearPostProcessFilter(NONE, 0.3f);
 }
 
 void Gameplay::UpdateCamera(float dt)
@@ -83,6 +101,8 @@ void Gameplay::UpdateUI(float dt)
 
 void Gameplay::Tick(float dt)
 {
+  State::Tick(dt);
+
   UpdateCamera(dt);
   UpdateUI(dt);
 
@@ -105,7 +125,8 @@ void Gameplay::Tick(float dt)
 
   if(Input::Released('P'))
   {
-    return;
+    if(!LevelPause::GetInstance()->Alive)
+      StateMachine::Push(LevelPause::GetInstance());
   }
 }
 
@@ -127,9 +148,6 @@ void Gameplay::DrawUI()
 
 void Gameplay::Draw()
 {
-  // Switch to backbuffer
-  PostProcess::RenderToBackBuffer();
-
   // Update effects camera
 	XMMATRIX view     = mCamera.View();
 	XMMATRIX proj     = mCamera.Proj();
@@ -139,9 +157,6 @@ void Gameplay::Draw()
 
   // Level draw
   mLevel->Draw();
-
-  // Draw back buffer to screen
-  PostProcess::DrawBackBuffer();
   
   // UI draw
   DrawUI();

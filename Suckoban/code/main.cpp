@@ -105,7 +105,6 @@ void Game::UpdateScene(float dt)
     PostQuitMessage(0);
 
   Input::Tick(dt);
-  PostProcess::Tick(dt);
 
   StateMachine::Tick(dt);
 
