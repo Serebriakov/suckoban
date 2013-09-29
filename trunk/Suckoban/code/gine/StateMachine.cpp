@@ -1,40 +1,41 @@
 #include "StateMachine.h"
+#include "Input.h"
 using namespace Gine;
 
 vector<State*> StateMachine::mStates;
 vector<State*> StateMachine::mAllStates;
-Tween          StateMachine::mTransitionTween;
-Transition     StateMachine::mCurrTransition = TRANSITION_NONE;
 
-void StateMachine::Change(State* state, Transition transition, float duration, Easing easing)
+void StateMachine::Change(State* state)
 {
 	if(!mStates.empty())
 		mStates.back()->Exit();
 
+  Input::ClearBuffers();
 	mStates.push_back(state);
 	mStates.back()->Enter();
 
   RememberState(state);
 }
 
-void StateMachine::Push(State* state, Transition transition, float duration, Easing easing)
+void StateMachine::Push(State* state)
 {
 	if(!mStates.empty())
 		mStates.back()->Pause();
-
+  
+  Input::ClearBuffers();
 	mStates.push_back(state);
 	mStates.back()->Enter();
 
   RememberState(state);
 }
 
-void StateMachine::Pop(Transition transition, float duration, Easing easing)
+void StateMachine::Pop()
 {
 	if(!mStates.empty())
 		mStates.back()->Exit();
 
 	if(!mStates.empty())
-		mStates.back()->Resume();
+    mStates[mStates.size() - 2]->Resume();
 }
 
 bool StateMachine::Destroy()
@@ -59,8 +60,25 @@ void StateMachine::Tick(float dt)
 
 void StateMachine::Draw()
 {
-  for(unsigned int i=0; i<mStates.size(); i++)
+  gContext->ClearRenderTargetView(gRenderTargetView, reinterpret_cast<const float*>(&Colors::Black));
+
+  for(unsigned int i=0; i<mStates.size(); i++) {
+    // Draw every state to his own RTV
+    ID3D11RenderTargetView* const rtv = mStates[i]->GetRTV();
+    gContext->OMSetRenderTargets(1, &rtv, gDepthStencilView);
+    gContext->ClearRenderTargetView(rtv, reinterpret_cast<const float*>(&Colors::MPink));
+    if(i==0)   
+      gContext->ClearRenderTargetView(rtv, reinterpret_cast<const float*>(&Colors::Black));
+
+    gContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
     mStates[i]->Draw();
+
+    // Apply post-process effect to a scene resource
+    PostProcess::ApplyEffect(mStates[i]->GetPostProcess(), mStates[i]->GetSRV(), gRenderTargetView);
+    
+    // Render scene to screen
+    //PostProcess::ApplyEffect(0, mStates[i]->GetSRV(), gRenderTargetView);
+  }
 }
 
 void StateMachine::RememberState(State* state)

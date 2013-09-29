@@ -24,6 +24,8 @@ namespace Gine
     static bool Released(int aKey);
     static bool PressedDir(Dir::Enum& aDir);
 
+    static void ClearBuffers();
+
   private:
     static bool mLastFrame[N_VIRTUAL_KEYS];
     static bool mThisFrame[N_VIRTUAL_KEYS];

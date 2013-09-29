@@ -196,6 +196,21 @@ PostProcessEffect::PostProcessEffect(ID3D11Device* device, const std::wstring& f
 }
 #pragma endregion
 
+#pragma region TransitionEffect
+TransitionEffect::TransitionEffect(ID3D11Device* device, const std::wstring& filename)
+	: Effect(device, filename)
+{
+  DefaultTech   = mFX->GetTechniqueByName("DefaultTech");
+  FadeInTech    = mFX->GetTechniqueByName("FadeInTech");
+  FadeOutTech   = mFX->GetTechniqueByName("FadeOutTech");
+
+	From          = mFX->GetVariableByName("From")->AsShaderResource();
+	To            = mFX->GetVariableByName("To")->AsShaderResource();
+	WindowSize    = mFX->GetVariableByName("gWindowSize")->AsVector();
+  Transition    = mFX->GetVariableByName("gTransition")->AsScalar();
+}
+#pragma endregion
+
 #pragma region BillboardEffect
 BillboardEffect::BillboardEffect(ID3D11Device* device, const std::wstring& filename)
 	: Effect(device, filename)
@@ -222,6 +237,7 @@ BillboardEffect::~BillboardEffect()
 BasicEffect*    Effects::BasicFX = 0;
 SpriteEffect*   Effects::SpriteFX = 0;
 PostProcessEffect* Effects::PostProcessFX = 0;
+TransitionEffect* Effects::TransitionFX = 0;
 //ParticleEffect* Effects::FireFX = 0;
 SsaoNormalDepthEffect* Effects::SsaoNormalDepthFX = 0;
 SsaoEffect*            Effects::SsaoFX            = 0;
@@ -234,6 +250,7 @@ void Effects::InitAll(ID3D11Device* device)
 	BasicFX              = new BasicEffect   (device, L"data/fx/Basic.fxo");
 	SpriteFX             = new SpriteEffect  (device, L"data/fx/Sprite.fxo"); 
   PostProcessFX = new PostProcessEffect(device, L"data/fx/PostProcess.fxo");
+  TransitionFX = new TransitionEffect(device, L"data/fx/Transition.fxo");
 	//FireFX               = new ParticleEffect(device, L"FX/Fire.fxo"); 
 
   SsaoNormalDepthFX = new SsaoNormalDepthEffect(device, L"data/fx/SsaoNormalDepth.fxo");
@@ -250,6 +267,7 @@ void Effects::DestroyAll()
 	SafeDelete(BasicFX);
 	SafeDelete(SpriteFX);
   SafeDelete(PostProcessFX);
+  SafeDelete(TransitionFX);
 	//SafeDelete(FireFX);
 
   SafeDelete(SsaoNormalDepthFX);

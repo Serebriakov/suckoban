@@ -4,44 +4,48 @@
 
 namespace Gine
 {
-  enum PostEffect
+  enum PostProcessFilter
   {
-    POST_EFFECT_NONE = 0,
-    POST_EFFECT_GREYSCALE,
-    POST_EFFECT_BLUR
+    POST_PROCESS_FILTER_NONE = 0,
+    POST_PROCESS_FILTER_GREYSCALE,
+    POST_PROCESS_FILTER_BLUR
   };
 
-  /// <summary>
-  /// Post processing effects
-  /// </summary>
+  enum Transition
+  {
+    TRANSITION_NONE = 0,
+    TRANSITION_FADEIN,
+    TRANSITION_FADEOUT
+  };
 
+  /// <summary> 
+  /// Current post-process effect inside a game state
+  /// </summary>
   class PostProcess
   {
   public:
-    ~PostProcess() {}
-
     static bool Init();
     static void Destroy();
-    static void Tick(float dt);
+    static void ApplyEffect(PostProcess* postProcess, ID3D11ShaderResourceView* inSRV, ID3D11RenderTargetView* outRTV);
+    static ID3D11ShaderResourceView* GetSRV() { return mBufferedShaderResourceView[0]; }
 
-    /// <summary> Clears the backbuffer and rendeers to it </summary>
-    static void RenderToBackBuffer();
+    PostProcess() : mPostProcessFilter(POST_PROCESS_FILTER_NONE) {}
 
-    /// <summary> Sets a post process effect with a smooth transition </summary>
-    static void SetEffect(PostEffect postEffect, Easing easing, float duration);
-    
-    /// <summary> Clears a post process effect with a smooth transition </summary>
-    static void ClearEffect(Easing easing, float duration);
+    void SetPostProcessFilter(PostProcessFilter postProcessFilter, Easing easing, float duration);
+    void ClearPostProcessFilter(Easing easing, float duration);
 
-    /// <summary> Draws back buffer to screen and sets next rendering to screen </summary>
-    static void DrawBackBuffer();
+    void SetTransition(Transition transition, Easing easing, float duration);
+
+    void Tick(float dt);
 
   private:
-    PostProcess() {}
+    PostProcessFilter mPostProcessFilter;
+    Tween mPostProcessTween;
+    Transition mTransition;
+    Tween mTransitionTween;
 
-    static map<PostEffect, vector<ID3DX11EffectTechnique*>> mAllEfects;
-    static PostEffect mCurrEffect;
-    static Tween mTransition;
+    static map<PostProcessFilter, vector<ID3DX11EffectTechnique*>> mAllFilters;
+    static map<Transition, vector<ID3DX11EffectTechnique*>> mAllTransitions;
 
 	  static ID3D11RenderTargetView*   mBufferedRenderTargetView[2];
     static ID3D11ShaderResourceView* mBufferedShaderResourceView[2];
@@ -50,11 +54,8 @@ namespace Gine
 
     static void CreateBackBufferViews();
     static void CreateBackBufferBuffers();
-    static void SwapRTVBuffers();
-    static void SwapSRVBuffers();
 
-    static void SetEffect(PostEffect postEffect);
-
-    static void RenderToScreen();
+    /// <summary> Clears the backbuffer and renders to it </summary>
+    static void ClearAndRenderTo(ID3D11RenderTargetView* RTV);
   };
 }

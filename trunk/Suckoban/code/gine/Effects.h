@@ -260,6 +260,30 @@ public:
 };
 #pragma endregion
 
+#pragma region TransitionEffect
+class TransitionEffect : public Effect
+{
+public:
+	TransitionEffect(ID3D11Device* device, const std::wstring& filename);
+  ~TransitionEffect() {}
+
+	void SetFrom(ID3D11ShaderResourceView* SRV) { From->SetResource(SRV); }
+	void SetTo  (ID3D11ShaderResourceView* SRV) { To  ->SetResource(SRV); }
+  void SetWindowSize(const XMFLOAT2& v) { WindowSize->SetRawValue(&v, 0, sizeof(XMFLOAT2)); }
+  void SetTransition(float f) { Transition->SetFloat(f); }
+
+	ID3DX11EffectTechnique* DefaultTech;
+	ID3DX11EffectTechnique* FadeInTech;
+	ID3DX11EffectTechnique* FadeOutTech;
+
+	ID3DX11EffectShaderResourceVariable* From;
+	ID3DX11EffectShaderResourceVariable* To;
+  ID3DX11EffectVectorVariable* WindowSize;
+  ID3DX11EffectScalarVariable* Transition;
+
+};
+#pragma endregion
+
 #pragma region BillboardEffect
 class BillboardEffect : public Effect
 {
@@ -299,6 +323,7 @@ public:
 
 	static BasicEffect*           BasicFX;
   static PostProcessEffect*     PostProcessFX;
+  static TransitionEffect*      TransitionFX;
 	static SpriteEffect*          SpriteFX;
  // static ParticleEffect*        FireFX;
 	static SsaoNormalDepthEffect* SsaoNormalDepthFX;
